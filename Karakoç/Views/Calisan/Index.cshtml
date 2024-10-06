@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Karakoç.Models.Calisan>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_KarakocLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Kayıt Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var calisan in Model)
+        {
+            <tr>
+                <td>@calisan.CalısanId</td>
+                <td>@calisan.Name</td>
+                <td>@calisan.Surname</td>
+                <td>@calisan.Email</td>
+                <td>@calisan.KayıtTarihi</td>
+            </tr>
+        }
+    </tbody>
+</table>
+ 
+<style>
+    .table {
+        margin-left: 100px;
+    }
+</style>
