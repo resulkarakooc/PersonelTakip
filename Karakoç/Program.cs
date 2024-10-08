@@ -1,3 +1,4 @@
+using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<LoginManager>();
 
 // DbContext'i kaydet
 builder.Services.AddDbContext<ResulContext>(options =>
@@ -40,6 +42,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Organizer}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

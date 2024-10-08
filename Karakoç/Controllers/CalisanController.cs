@@ -14,25 +14,41 @@ namespace Karakoç.Controllers
             _resulContext = resulContext;
         }
 
-        public async Task<IActionResult> Index()
+        public class YevmiyeViewClass
         {
-            var calisan = await _resulContext.Calisans.ToListAsync();
-            return View(calisan);
+            public List<Yevmiyeler> YevmiyelerList { get; set; } // İsim değişikliği
         }
 
+        [HttpGet]
         public IActionResult AnaSayfa()
         {
             var userName = HttpContext.Session.GetString("UserName");
             var userSurName = HttpContext.Session.GetString("UserSurName");
             var userEmail = HttpContext.Session.GetString("UserEmail");
             var KayitTarihi = HttpContext.Session.GetString("KayitTarihi");
+            var calisanId = HttpContext.Session.GetInt32("CalisanId");
+
+            
+
+            var yevmiyeler = _resulContext.Yevmiyelers
+                .Where(y => y.CalisanId == calisanId)
+                .ToList();
+
+            var yevmiye = new YevmiyeViewClass
+            {
+                YevmiyelerList = yevmiyeler // İsim değişikliği
+            };
 
             // ViewBag ile view'a aktar
             ViewBag.UserName = userName;
             ViewBag.UserSurName = userSurName;
             ViewBag.UserEmail = userEmail;
             ViewBag.KayitTarihi = KayitTarihi;
-            return View();
+
+            return View(yevmiye); // Değişiklik yapıldı
         }
+
+        
+
     }
 }

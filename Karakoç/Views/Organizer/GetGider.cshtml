@@ -1,0 +1,56 @@
+﻿@model Karakoç.Controllers.OrganizerController.GiderViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetGider</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Giderler</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Açıklama</th>
+                <th>Tutar</th>
+                <th>Çalışan</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Giderler != null && Model.Giderler.Any())
+            {
+                foreach (var gider in Model.Giderler)
+                {
+                    <tr>
+                        <td>@gider.Description</td>
+                        <td>@gider.Amount.ToString("C2")</td> <!-- Format to currency -->
+                        <td>@gider.Calisan.Name @gider.Calisan.Surname </td>
+                        <td>@gider.Tarih.ToString("dd/MM/yyyy")</td> <!-- Format date -->
+                    </tr>
+                }
+
+
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">Henüz gider kaydı yok.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="alert alert-info" role="alert">
+        Toplam Tutar: @Model.ToplamTutar.ToString("C") <!-- Para formatında göster -->
+    </div>
+
+</body>
+</html>

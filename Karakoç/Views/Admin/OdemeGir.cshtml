@@ -1,0 +1,32 @@
+﻿@model Karakoç.Controllers.AdminController.CalisanViewModel
+@{
+    ViewData["Title"] = "OdemeGir";
+    Layout = "~/Views/Shared/_KarakocLayout.cshtml";
+}
+
+<h1>OdemeGir</h1>
+
+<form action="/Admin/KaydetOdeme" method="post">
+    <div class="mb-3">
+        <label for="CalisanId" class="form-label">Çalışan:</label>
+        <select name="CalisanId" id="CalisanId" class="form-select">
+            <option value="">Çalışan Seçin</option>
+            @foreach (var calisan in Model.Calisanlar)
+            {
+                <option value="@calisan.CalısanId">@calisan.Name @calisan.Surname</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Aciklama" class="form-label">Açıklama:</label>
+        <input type="text" name="Aciklama" id="Aciklama" class="form-control" placeholder="Gider açıklaması" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Tutar" class="form-label">Tutar:</label>
+        <input type="number" name="tutar" id="Tutar" step="0.01" class="form-control" placeholder="Gider tutarı" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

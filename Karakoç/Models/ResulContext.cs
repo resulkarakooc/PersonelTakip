@@ -7,21 +7,13 @@ namespace Karakoç.Models
 {
     public partial class ResulContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-
-        public ResulContext(DbContextOptions<ResulContext> options, IConfiguration configuration)
-            : base(options)
+        public ResulContext()
         {
-            _configuration = configuration;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ResulContext(DbContextOptions<ResulContext> options)
+            : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Bağlantı dizesini yapılandırmadan al
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
-            }
         }
 
         public virtual DbSet<Calisan> Calisans { get; set; } = null!;
@@ -29,7 +21,13 @@ namespace Karakoç.Models
         public virtual DbSet<Odemeler> Odemelers { get; set; } = null!;
         public virtual DbSet<Yevmiyeler> Yevmiyelers { get; set; } = null!;
 
-       
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("name=DefaultConnection");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,9 +56,7 @@ namespace Karakoç.Models
 
                 entity.ToTable("Giderler");
 
-                entity.Property(e => e.GiderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("GiderID");
+                entity.Property(e => e.GiderId).HasColumnName("GiderID");
 
                 entity.Property(e => e.CalisanId).HasColumnName("CalisanID");
 
@@ -81,9 +77,7 @@ namespace Karakoç.Models
 
                 entity.ToTable("Odemeler");
 
-                entity.Property(e => e.OdemeId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OdemeID");
+                entity.Property(e => e.OdemeId).HasColumnName("OdemeID");
 
                 entity.Property(e => e.Amount).HasColumnName("amount");
 

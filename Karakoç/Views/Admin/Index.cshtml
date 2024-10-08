@@ -1,0 +1,73 @@
+﻿@model List<Karakoç.Models.Calisan>
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="/css/sitee.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+   
+@* 
+    <nav class="nav">
+        <input id="menu" type="checkbox">
+        <label for="menu">Menu</label>
+        <ul class="menu">
+            <li>
+                <a href="#0">
+                    <span>About</span>
+                    <i class="fas fa-address-card" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#0">
+                    <span>Projects</span>
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#0">
+                    <span>Clients</span>
+                    <i class="fas fa-users" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#0">
+                    <span>Contact</span>
+                    <i class="fas fa-envelope-open-text" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav> *@
+
+    <h2>Çalışan Listesi</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Sigorta Giriş</th> <!-- Ek alanlar varsa ekleyebilirsin -->
+        </tr>
+        @foreach (var calisan in Model)
+        {
+            <tr>
+                <td>@calisan.Name</td>
+                <td>@calisan.Surname</td>
+                <td>@calisan.KayıtTarihi.ToString()</td>
+          
+            </tr>
+        }
+    </table>
+    
+
+</body>
+</html>

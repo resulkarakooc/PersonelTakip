@@ -18,6 +18,10 @@
 			{
 				<p style="color: red;">@ViewBag.ErrorMessage</p>
 			}
+			@if (ViewBag.Info != null)
+			{
+				<p style="color:orangered" >@ViewBag.Info</p>
+			}
 
 			<form method="post" action="/Login/Register">
 				<label for="chk" aria-hidden="true">Kayıt Oll</label>
