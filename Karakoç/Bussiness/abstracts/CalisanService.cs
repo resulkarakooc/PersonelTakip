@@ -1,7 +1,9 @@
-﻿namespace Karakoç.Bussiness.abstracts
+﻿using Karakoç.Models;
+
+namespace Karakoç.Bussiness.abstracts
 {
 	public interface CalisanService
 	{
-		public void GetYevmiye();
+		public List<Yevmiyeler> GetYevmiye(HttpContext httpContext);
 	}
 }

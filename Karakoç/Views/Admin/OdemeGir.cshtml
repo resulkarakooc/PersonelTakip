@@ -1,4 +1,4 @@
-﻿@model Karakoç.Controllers.AdminController.CalisanViewModel
+﻿@model List<Karakoç.Models.Calisan>
 @{
     ViewData["Title"] = "OdemeGir";
     Layout = "~/Views/Shared/_KarakocLayout.cshtml";
@@ -11,7 +11,7 @@
         <label for="CalisanId" class="form-label">Çalışan:</label>
         <select name="CalisanId" id="CalisanId" class="form-select">
             <option value="">Çalışan Seçin</option>
-            @foreach (var calisan in Model.Calisanlar)
+            @foreach (var calisan in Model)
             {
                 <option value="@calisan.CalısanId">@calisan.Name @calisan.Surname</option>
             }
@@ -28,5 +28,5 @@
         <input type="number" name="tutar" id="Tutar" step="0.01" class="form-control" placeholder="Gider tutarı" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <button type="submit" class="btn btn-primary">Kaydet</button> <br /> <p>@ViewBag.Bilgi</p>
 </form>

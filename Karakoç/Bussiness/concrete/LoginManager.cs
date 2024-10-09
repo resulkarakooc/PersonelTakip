@@ -1,14 +1,11 @@
 ﻿using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Karakoç.Bussiness.concrete
 {
     public class LoginManager : LoginService
     {
         private readonly ResulContext _context;
-
- 
 
         public LoginManager(ResulContext context)
         {
@@ -28,9 +25,8 @@ namespace Karakoç.Bussiness.concrete
                 httpContext.Session.SetString("UserEmail", user.Email);
                 if (user.KayıtTarihi.HasValue) // Nullable kontrolü
                 {
-                    httpContext.Session.SetString("KayitTarihi", user.KayıtTarihi.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+                    httpContext.Session.SetString("KayitTarihi", user.KayıtTarihi.Value.ToString("yyyy-MM-dd"));
                 }
-
                 return true;
             }
             else

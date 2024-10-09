@@ -1,47 +1,59 @@
-﻿using Karakoç.Models;
+﻿using Karakoç.Bussiness.abstracts;
+using Karakoç.Bussiness.concrete;
+using Karakoç.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Karakoç.Controllers.OrganizerController;
+
 
 namespace Karakoç.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly ResulContext _resulContext;
+        private AdminManager _adminManager;
 
-        public AdminController(ResulContext resulContext)
+        public AdminController(AdminManager adminManager)
         {
-            _resulContext = resulContext;
+            _adminManager = adminManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index()  //çalışan listeleme
         {
-            var calisans =  _resulContext.Calisans.ToList();
-            return View(calisans);
+            return View(_adminManager.GetCalisans());
         }
-        public class CalisanViewModel //calisanlar listesi oluşturdum ben
+
+        public class OdemelerViewModel
         {
-            public List<Calisan> Calisanlar { get; set; }
+            public List<Odemeler> Odemeler { get; set; }
+            public decimal ToplamTutar { get; set; }
+        }
+
+        public IActionResult Odemeler()
+        {
+            var odemeListesi = _adminManager.GetOdeme(); // AdminManager'dan Odemeler'i al
+            var toplamTutar = odemeListesi.Sum(o => o.Amount); // Toplam tutarı hesapla
+
+            // ViewModel'i doğrudan burada tanımla
+            var odemeViewModel = new OdemelerViewModel
+            {
+                Odemeler = odemeListesi,
+                ToplamTutar = toplamTutar
+            };
+
+            return View(odemeViewModel); // ViewModel'i View'a gönder
+            
         }
 
         public IActionResult OdemeGir()
         {
-            var calisanlar = _resulContext.Calisans.ToList();
-
-            // View'e gönderilecek model
-            var model = new CalisanViewModel
-            {
-                Calisanlar = calisanlar
-            };
-
-            return View(model);
-
+            return View(_adminManager.GetCalisans());
         }
 
         [HttpPost]
-        public IActionResult KaydetOdeme()
+        public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar)
         {
-            return View();
+            _adminManager.KaydetOdeme(CalisanId, Aciklama, tutar);
+            ViewBag.Bilgi = "Kayıt Edildi";
+            return RedirectToAction("OdemeGir", "Admin");
         }
     }
 }

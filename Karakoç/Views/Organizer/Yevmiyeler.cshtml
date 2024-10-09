@@ -1,4 +1,4 @@
-﻿@model Karakoç.Controllers.OrganizerController.CalisanViewModel
+﻿@model List<Karakoç.Models.Calisan>
 @{
     Layout = null;
 }
@@ -22,15 +22,15 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Çalışan Adı</th>
+                        <th>Çalışan isim ve soyisim</th>
                         <th>Çalıştı mı?</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var calisan in Model.Calisanlar)
+                    @foreach (var calisan in Model)
                     {
                         <tr>
-                            <td>@calisan.Name</td>
+                            <td>@calisan.Name @calisan.Surname</td>
                             <td>
                                 <input type="checkbox" name="isWorked" value="@calisan.CalısanId" />
                             </td>

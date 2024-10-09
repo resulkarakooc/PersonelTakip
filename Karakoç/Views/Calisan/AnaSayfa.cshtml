@@ -1,4 +1,4 @@
-﻿@model Karakoç.Controllers.CalisanController.YevmiyeViewClass
+﻿@model List<Karakoç.Models.Yevmiyeler>
 
 @{
     ViewData["Title"] = "AnaSayfa";
@@ -16,14 +16,12 @@
     @*<link rel="stylesheet" href="/css/site.css" />*@
 </head>
 
-
 <body>
-    
- 
 
 <h2>Yevmiye Bilgileri</h2>
 
-
+<h3>@ViewBag.UserName @ViewBag.UserSurName</h3>
+<h2>@ViewBag.UserEmail</h2>
 
     <table class="table table-bordered">
         <thead>
@@ -33,16 +31,31 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var yevmiye in Model.YevmiyelerList)
+            @foreach (var yevmiye in Model)
             {
                 <tr>
-                    <td>@yevmiye.Tarih</td> <!-- Tarih formatı -->
-                    <td>@yevmiye.IsWorked</td> <!-- Yazım düzeltmesi -->
+                    <td>@yevmiye.Tarih?.ToString("yyyy-MM-dd")</td> <!-- Tarih formatı -->
+                    <td>
+                        @if (yevmiye.IsWorked.HasValue)
+                        {
+                            if (yevmiye.IsWorked.Value)
+                            {
+                                <span style="color: green; font-size:20px; font-weight: bold;">&#10003;</span> <!-- Yeşil tik -->
+                            }
+                            else
+                            {
+                                <span style="color: red;  font-size:20px; font-weight: bold">&#10007;</span> <!-- Kırmızı çarpı -->
+                            }
+                        }
+                        else
+                        {
+                            <span style="color: gray;">Bilinmiyor</span> <!-- Null durum için -->
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-
 
     </body>
     </html>
