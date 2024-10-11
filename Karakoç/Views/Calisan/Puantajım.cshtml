@@ -1,0 +1,130 @@
+﻿@model List<Yevmiyeler>
+@{
+    ViewData["Title"] = "Puantajım";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<style>
+    .calendar-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .calendar-table th, .calendar-table td {
+            border: 1px solid #ddd;
+            width: 14.28%; /* 7 güne bölecek şekilde genişlik */
+            height: 60px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .grey-background {
+        background-color: #00000000 !important;
+    }
+
+    .green-background {
+        background-color: green !important;
+        color: white;
+    }
+
+    .red-background {
+        background-color: #ffcccc !important;
+    }
+    /* Açık kırmızı */
+</style>
+
+
+<!-- ! Main -->
+<main class="main users chart-page" id="skip-target">
+    <div class="container">
+        <h2 class="main-title">Yevmiye Takip</h2>
+        <div class="row stat-cards">
+            <div class="col-md-6 col-xl-3">
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-9">
+
+                    <div class="users-table table-wrapper">
+
+                        <table class="calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>Pzt</th>
+                                    <th>Salı</th>
+                                    <th>Çarş</th>
+                                    <th>Perş</th>
+                                    <th>Cuma</th>
+                                    <th>Ctesi</th>
+                                    <th>Pazar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    DateTime ilkGun = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                                    int daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+                                    int ilkGunHaftaninGunu = (int)ilkGun.DayOfWeek == 0 ? 6 : (int)ilkGun.DayOfWeek - 1; // Pazar en sonda
+
+                                    int gunSayaci = 1;
+                                    for (int i = 0; i < 6; i++) // 6 hafta satırı
+                                    {
+                                        <tr>
+                                            @for (int j = 0; j < 7; j++)
+                                            {
+                                                if (i == 0 && j < ilkGunHaftaninGunu || gunSayaci > daysInMonth)
+                                                {
+                                                    <td></td> <!-- Boş hücre -->
+                                                }
+                                                else
+                                                {
+                                                    DateTime gunTarihi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, gunSayaci);
+                                                    var yevmiye = Model.FirstOrDefault(y => y.Tarih.HasValue && y.Tarih.Value.Date == gunTarihi.Date);
+
+                                                    // Arkaplan rengi belirleme
+                                                    string cssClass = yevmiye == null ? "red-background" :
+                                                    yevmiye.IsWorked == true ? "green-background" : "grey-background";
+
+                                                    <td class="@cssClass">@gunSayaci</td>
+                                                    gunSayaci++;
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <article class="customers-wrapper">
+                        <canvas id="customersChart" aria-label="Customers statistics" role="img"></canvas>
+                        <!--              <p class="customers__title">New Customers <span>+958</span></p>
+                        <p class="customers__date">28 Daily Avg.</p>
+                        <picture><source srcset="./img/svg/customers.svg" type="image/webp"><img src="./img/svg/customers.svg" alt=""></picture> -->
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- ! Footer -->
+<footer class="footer">
+    <div class="container footer--flex">
+        <div class="footer-start">
+            <p>
+                2024 © Karakoç Dashboard - <a href="elegant-dashboard.com" target="_blank"
+                                              rel="noopener noreferrer">elegant-dashboard.com</a>
+            </p>
+        </div>
+        <ul class="footer-end">
+            <li><a href="##">About</a></li>
+            <li><a href="##">Support</a></li>
+            <li><a href="##">Puchase</a></li>
+        </ul>
+    </div>
+</footer>

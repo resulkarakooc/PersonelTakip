@@ -1,5 +1,6 @@
 ﻿using Karakoç.Bussiness.concrete;
 using Karakoç.Models; // Modelin bulunduğu namespace
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // EF Core için gerekli
 using System.Threading.Tasks;
@@ -8,11 +9,13 @@ namespace Karakoç.Controllers
 {
     public class CalisanController : Controller
     {
-		private readonly CalisanManager manager;
-		public CalisanController(CalisanManager calisanManager)
-		{
-			manager = calisanManager;
-		}
+        private readonly ResulContext _resulContext;
+        private readonly CalisanManager manager;
+        public CalisanController(CalisanManager calisanManager, ResulContext resulContext)
+        {
+            manager = calisanManager;
+            _resulContext = resulContext;
+        }
 
         [HttpGet]
         public IActionResult AnaSayfa()
@@ -29,6 +32,30 @@ namespace Karakoç.Controllers
 
             return View(manager.GetYevmiye(HttpContext)); // burası bir liste döndürücek geriye
         }
+
+        public IActionResult Home()
+        {
+            var yevmiyeListesi = _resulContext.Yevmiyelers.Where(y => y.CalisanId == 1).ToList();
+
+            // Çalışılan günleri sayma
+            int calismaGunSayisi = yevmiyeListesi.Count(y => y.IsWorked == true);
+            ViewBag.WorkedDays = calismaGunSayisi;
+            return View();
+        }
+
+        public IActionResult Puantajım()
+        {
+            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+            kullaniciId = 1;
+
+            // Veritabanından bu kullanıcıya ait yevmiye kayıtlarını çek
+            var yevmiyeKayitlari = _resulContext.Yevmiyelers
+                .Where(y => y.CalisanId == kullaniciId)
+                .ToList();
+
+            return View(yevmiyeKayitlari);
+        }
+
 
     }
 }
