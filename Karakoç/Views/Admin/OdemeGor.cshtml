@@ -1,0 +1,162 @@
+﻿@model List<Karakoç.Models.Odemeler>
+
+@{
+    ViewData["Title"] = "OdemeGor";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<main class="main users chart-page" id="skip-target">
+    <div class="container">
+        <h2 class="main-title">Yapılan Ödemeler</h2>
+        <div class="row stat-cards">
+            <div class="col-md-6 col-xl-3">
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-9">
+
+                    <div class="users-table table-wrapper">
+                        <div class="table-container">
+
+                            <style>
+                                /* Tablo için temel ayarlar */
+                                .table {
+                                    width: 100% !important;
+                                    max-width: 100% !important;
+                                    margin-bottom: 1rem !important;
+                                    background-color: transparent !important;
+                                    border-collapse: collapse !important;
+                                }
+
+                                    .table th,
+                                    .table td {
+                                        padding: 0.75rem !important;
+                                        vertical-align: top !important;
+                                        border-top: 1px solid #dee2e6 !important;
+                                    }
+
+                                    /* Başlık satırı için ayarlar */
+                                    .table thead th {
+                                        vertical-align: bottom !important;
+                                        border-bottom: 2px solid #dee2e6 !important;
+                                    }
+
+                                    .table tbody + tbody {
+                                        border-top: 2px solid #dee2e6 !important;
+                                    }
+
+                                /* Gündüz modu: table-primary */
+                                .table-primary {
+                                    background-color: #e9f5ff !important;
+                                }
+
+                                    .table-primary th,
+                                    .table-primary td {
+                                        background-color: #e9f5ff !important;
+                                        color: #212529 !important;
+                                    }
+
+                                    .table-primary thead th {
+                                        background-color: #d1e7fd !important;
+                                        border-color: #111111 !important;
+                                    }
+
+
+                                /* Gece modu: table-dark */
+                                .table-dark {
+                                    background-color: #343a40 !important;
+                                    color: black !important;
+                                }
+
+                                    .table-dark th,
+                                    .table-dark td {
+                                        border-color: #454d55 !important;
+                                    }
+
+                                    .table-dark thead th {
+                                        background-color: #495057 !important;
+                                        border-color: #6c757d !important;
+                                    }
+
+                                    .table-dark tfoot tr td {
+                                            
+                                        font-weight: bold !important;
+                                        color: black!important;
+                                        border-top: 2px solid #454d55 !important;
+                                    }
+
+                                /* Tfoot ayarları (toplam miktar için) */
+                                tfoot tr td {
+                                    font-weight: bold !important;
+                                    border-top: 2px solid #dee2e6 !important;
+                                    text-align: right !important;
+                                }
+
+                            </style>
+
+                            <table class="table table-primary">
+                                <thead>
+                                    <tr>
+                                        <th>Çalişan</th>
+                                        <th>Ödeme Tarihi</th>
+                                        <th>Açıklama</th>
+                                        <th>Miktar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        decimal toplamMiktar = 0;
+                                        foreach (var odeme in Model)
+                                        {
+                                            <tr>
+
+
+                                                <td>@odeme.Tarih.ToString("dd.MM.yyyy")</td>
+                                                <td>@odeme.Calisan.Name @odeme.Calisan.Surname</td>
+                                                <td>@odeme.Description</td>
+                                                <td>@odeme.Amount.ToString("C")</td>
+                                            </tr>
+                                            toplamMiktar += odeme.Amount;
+                                        }
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2"><strong>Toplam</strong></td>
+                                        <td><strong>@toplamMiktar.ToString("C")</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Gece-Gündüz Temasını Değiştir
+    document.querySelector('.theme-switcher').addEventListener('click', function () {
+        // Table öğesini seçiyoruz
+        const table = document.querySelector('.table');
+
+        // Light moddaysa Dark moda, Dark moddaysa Light moda geçiş yapar
+        if (table.classList.contains('table-primary')) {
+            table.classList.remove('table-primary');
+            table.classList.add('table-dark');
+        } else {
+            table.classList.remove('table-dark');
+            table.classList.add('table-primary');
+        }
+    });
+
+</script>

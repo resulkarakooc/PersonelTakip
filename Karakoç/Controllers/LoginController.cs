@@ -43,4 +43,14 @@ public class LoginController : Controller
 			return View("Index");
 		}
 	}
+
+	public IActionResult Giris()
+	{
+		return View();
+	}
+
+	public IActionResult KayıtOl()
+	{
+		return View();
+	}
 }

@@ -7,5 +7,6 @@ namespace Karakoç.Bussiness.abstracts
         List<Calisan> GetCalisans();
         bool KaydetOdeme(int CalisanId, string Aciklama, int tutar);
         List<Odemeler> GetOdeme();
+        public List<Yevmiyeler> GetYevmiyeler();
     }
 }

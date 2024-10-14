@@ -16,10 +16,28 @@ namespace Karakoç.Controllers
             _adminManager = adminManager;
         }
 
-        public IActionResult Index()  //çalışan listeleme
+        public IActionResult YevmiyeGor()
         {
-            return View(_adminManager.GetCalisans());
+            
+
+            return View(_adminManager.GetYevmiyeler());
         }
+
+        public IActionResult OdemeGiris()
+        { 
+            return View(_adminManager.GetCalisans()); 
+        }
+
+        public IActionResult OdemeGor()
+        {
+            var odemelist = _adminManager.GetOdeme().ToList();
+            return View(odemelist);
+        }
+
+        /// <summary>
+        /// ////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+
 
         public class OdemelerViewModel
         {
@@ -43,17 +61,13 @@ namespace Karakoç.Controllers
             
         }
 
-        public IActionResult OdemeGir()
-        {
-            return View(_adminManager.GetCalisans());
-        }
 
         [HttpPost]
         public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar)
         {
             _adminManager.KaydetOdeme(CalisanId, Aciklama, tutar);
             ViewBag.Bilgi = "Kayıt Edildi";
-            return RedirectToAction("OdemeGir", "Admin");
+            return RedirectToAction("OdemeGiris", "Admin");
         }
     }
 }

@@ -26,7 +26,15 @@ namespace Karakoç.Bussiness.concrete
 
 
             return odemeListesi;
-            
+        }
+
+        public List<Yevmiyeler> GetYevmiyeler()
+        {
+            var yevmiyeList = _resulContext.Yevmiyelers
+                            .Include(o => o.Calisan)
+                            .ToList();
+
+            return yevmiyeList;
         }
 
         public bool KaydetOdeme(int CalisanId, string Aciklama, int tutar)

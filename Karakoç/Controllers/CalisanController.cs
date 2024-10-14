@@ -40,6 +40,7 @@ namespace Karakoç.Controllers
             // Çalışılan günleri sayma
             int calismaGunSayisi = yevmiyeListesi.Count(y => y.IsWorked == true);
             ViewBag.WorkedDays = calismaGunSayisi;
+            ViewBag.UserName = "Resul Karakoç";
             return View();
         }
 
@@ -54,6 +55,14 @@ namespace Karakoç.Controllers
                 .ToList();
 
             return View(yevmiyeKayitlari);
+        }
+
+        public IActionResult Odemeler() 
+        {
+            var liste = _resulContext.Odemelers.Where(y => y.CalisanId == 1).ToList(); 
+            
+
+            return View(liste); 
         }
 
 
