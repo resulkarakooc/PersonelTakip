@@ -20,12 +20,12 @@ public class LoginController : Controller
 	{
 		if (_loginManager.Login(username, password, HttpContext)) // HttpContexti doğrudan kullanıcam
 		{
-			return RedirectToAction("AnaSayfa", "Calisan");
+			return RedirectToAction("Home", "Calisan");
 		}
 		else
 		{
 			ViewBag.ErrorMessage = "Email veya Parola Yanlış";
-			return View("Index");
+			return View("Giris");
 		}
 	}
 
@@ -44,13 +44,27 @@ public class LoginController : Controller
 		}
 	}
 
-	public IActionResult Giris()
-	{
-		return View();
-	}
+    
 
-	public IActionResult KayıtOl()
+
+   
+    public IActionResult Giris(string Email, string password)
 	{
 		return View();
-	}
+    }
+
+	
+	public IActionResult KayıtOl(string Rusername, string Rlastname, string Remail, string Rpassword)
+	{
+        if (_loginManager.Register(Rusername, Rlastname, Remail, Rpassword))
+        {
+            ViewBag.Info = "Kayıt Başarılı";
+            return View("Index");
+        }
+        else
+        {
+            ViewBag.Info = "Mail Zaten Kullanılıyor";
+            return View("Home");
+        }
+    }
 }

@@ -1,0 +1,51 @@
+﻿@model List<Karakoç.Models.Yevmiyeler> // Modelinizi uygun şekilde ayarlayın
+@{
+    ViewData["Title"] = "CalisanList";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Mevcut ayın gün sayısını ve toplam yevmiye hesaplamalarını burada yapın
+    var currentMonth = DateTime.Now.Month;
+    var currentYear = DateTime.Now.Year;
+
+    // Çalışanların toplam yevmiyelerini hesaplayın
+    var calisanlar = Model.GroupBy(y => new { y.CalisanId, y.Calisan.Name, y.Calisan.Surname })
+        .Select(g => new
+        {
+            CalisanId = g.Key.CalisanId,
+            Name = g.Key.Name,
+            Surname = g.Key.Surname,
+            TotalYevmiye = g.Count(y => y.IsWorked == true) // True olan yevmiyeleri say
+        })
+        .ToList();
+}
+
+
+<main class="main users chart-page" id="skip-target">
+    <div class="container">
+        <h2 class="main-title">Çalışanların Listesi</h2>
+
+
+        <table class="table table-bordered table-primary">
+            <thead>
+                <tr>
+                    <th>Çalışan</th>
+                    <th>Toplam Yevmiye</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var calisan in calisanlar)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Calisan","Admin", new { id = calisan.CalisanId })">
+                                @calisan.Name @calisan.Surname
+                            </a>
+                        </td>
+                        <td>@calisan.TotalYevmiye</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</main>

@@ -9,9 +9,9 @@
     <div class="container">
         <h2 class="main-title">Çalışanların Yevmiye Bilgisi</h2>
 
-        <div class="users-table table-wrapper">
-            <div class="table-container">
-                <table class="table table-primary">
+        <div>
+            <div>
+                <table class="table table-bordered table-primary">
                     <thead>
                         <tr>
                             <th>Çalışan</th>
@@ -30,15 +30,36 @@
                                 {
                                     var tarih = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i);
                                     var yevmiye = calisanGroup.FirstOrDefault(y => y.Tarih == tarih.Date);
-                                    var isWorked = yevmiye.IsWorked ?? false;
 
+                                    bool isWorked;
 
+                                    if (yevmiye == null)
+                                    {
+                                        // Eğer yevmiye yoksa, çalışmamış demektir
+                                        isWorked = false;
+                                    }
+                                    else
+                                    {
+                                        // Yevmiye varsa, IsWorked değerine göre isWorked değişkenini ayarla
+                                        if (yevmiye.IsWorked.HasValue)
+                                        {
+                                            isWorked = yevmiye.IsWorked.Value; // Nullable bool'den normal bool'a çevir
+                                        }
+                                        else
+                                        {
+                                            // Eğer IsWorked null ise, çalışmamış demektir
+                                            isWorked = false;
+                                        }
+                                    }
                                     <td style="background-color: @(isWorked ? "blue" : "transparent")"></td> <!-- Mavi arka plan -->
                                 }
                             </tr>
                         }
                     </tbody>
                 </table>
+
+
+
             </div>
         </div>
     </div>

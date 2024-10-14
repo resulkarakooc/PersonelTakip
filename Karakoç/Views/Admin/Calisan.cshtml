@@ -1,0 +1,102 @@
+﻿@model Karakoç.Models.Calisan
+@{
+    ViewData["Title"] = "Çalışan Bilgileri";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Mevcut ay ve yıl bilgisi
+    int currentYear = DateTime.Now.Year;
+    int currentMonth = DateTime.Now.Month;
+
+    // Gün sayısını al
+    int dayCount = DateTime.DaysInMonth(currentYear, currentMonth);
+}
+
+<main class="main users chart-page" id="skip-target">
+    <div class="container">
+
+
+        <h2 class="main-title">@Model.Name @Model.Surname Bilgileri</h2>
+
+        <table class="table table-bordered table-primary">
+            <thead>
+                <tr>
+                    <th>Alan</th>
+                    <th>Değer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>İsim</td>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr>
+                    <td>Soyisim</td>
+                    <td>@Model.Surname</td>
+                </tr>
+                <tr>
+                    <td>İd</td>
+                    <td>@Model.CalısanId</td>
+                </tr>
+                <tr>
+                    <td>Diğer Bilgiler</td>
+                    <td>@Model.Email</td> <!-- Diğer bilgileri buraya ekleyin -->
+                    <td>@Model.KayıtTarihi</td> <!-- Diğer bilgileri buraya ekleyin -->
+                </tr>
+            </tbody>
+        </table>
+
+        
+        <h1>Çalışanların Yevmiye Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h1>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-primary">
+                <thead>
+                    <tr>
+                        <th>Gün</th>
+                        <th>Çalıştı mı?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i <= dayCount; i++)
+                    {
+                        var tarih = new DateTime(currentYear, currentMonth, i);
+                        var yevmiye = Model.Yevmiyelers.FirstOrDefault(y => y.Tarih == tarih.Date);
+
+                        <tr>
+                            <td>@i</td>
+                            <td style="background-color: @(yevmiye != null && yevmiye.IsWorked == true ? "blue" : "transparent")">
+                                @if (yevmiye != null && yevmiye.IsWorked == true)
+                                {
+                                    <span>@i</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Ödeme Bilgileri</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-success">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Miktar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var odeme in Model.Odemelers) // Model.Odemelers kısmını uygun şekilde güncelleyin
+                    {
+                        <tr>
+                            <td>@odeme.Tarih.ToShortDateString()</td>
+                            <td>@odeme.Amount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</main>

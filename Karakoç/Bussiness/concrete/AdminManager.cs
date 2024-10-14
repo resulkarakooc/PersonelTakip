@@ -13,6 +13,19 @@ namespace Karakoç.Bussiness.concrete
         {
             _resulContext = resulContext;
         }
+
+        
+
+        public Calisan? GetCalisanById(int id)
+        {
+            
+                return _resulContext.Calisans
+                    .Include(c => c.Yevmiyelers)
+                    .Include(c => c.Odemelers)
+                    .FirstOrDefault(c => c.CalısanId == id);
+            
+        }
+
         public List<Calisan> GetCalisans()
         {
             return _resulContext.Calisans.ToList();
@@ -48,6 +61,36 @@ namespace Karakoç.Bussiness.concrete
             };
             _resulContext.Odemelers.Add(odeme);
             _resulContext.SaveChanges();
+            return true;
+        }
+
+        public bool KaydetYevmiye(DateTime Tarih, List<int> isWorked)
+        {
+            var calisanlar = _resulContext.Calisans.ToList();
+
+            foreach (var calisan in calisanlar)
+            {
+                // Bu çalışanın seçilen tarihte bir kaydı olup olmadığını kontrol et
+                var yevmiye = _resulContext.Yevmiyelers.FirstOrDefault(y => y.CalisanId == calisan.CalısanId && y.Tarih == Tarih);
+
+                // Eğer kayıt varsa güncelle
+                if (yevmiye != null)
+                {
+                    yevmiye.IsWorked = isWorked.Contains(calisan.CalısanId);
+                }
+                // Eğer kayıt yoksa yeni bir yevmiye kaydı oluştur
+                else
+                {
+                    var yeniYevmiye = new Yevmiyeler
+                    {
+                        CalisanId = calisan.CalısanId,
+                        Tarih = Tarih,
+                        IsWorked = isWorked.Contains(calisan.CalısanId)
+                    };
+                    _resulContext.Yevmiyelers.Add(yeniYevmiye);
+                }
+                _resulContext.SaveChanges();
+            }
             return true;
         }
     }

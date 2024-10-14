@@ -3,7 +3,7 @@ using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Text.RegularExpressions;
 
 namespace Karakoç.Controllers
 {
@@ -16,11 +16,71 @@ namespace Karakoç.Controllers
             _adminManager = adminManager;
         }
 
+        public IActionResult Index()
+        {
+            // Tüm çalışanları al
+            var calisanlar = _adminManager.GetCalisans();
+            var yevmiyeler = _adminManager.GetYevmiyeler();
+
+            // Çalışan sayısını ViewBag ile gönder
+            ViewBag.CalisanSayisi = calisanlar.Count;
+
+            // Mevcut ayın yılı ve ayı
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+
+            // Bu ayki true olan yevmiye sayısını hesapla
+            var trueYevmiyeCount = yevmiyeler.Count(y => y.Tarih.HasValue && // Nullable kontrolü
+                                                        y.Tarih.Value.Year == currentYear &&
+                                                        y.Tarih.Value.Month == currentMonth &&
+                                                        y.IsWorked == true);
+
+            // Yevmiye sayısını ViewBag ile gönder
+            ViewBag.TrueYevmiyeSayisi = trueYevmiyeCount;
+
+            return View(); // Çalışanları da model olarak gönder
+        }
+
+
+        [Route("/Admin/Calisan/{id}")]
+        public IActionResult Calisan(int id)
+        {
+
+            var calisan = _adminManager.GetCalisanById(id);
+
+            if (calisan == null)
+            {
+                return NotFound();
+            }
+
+            return View(calisan);
+        }
+
+
         public IActionResult YevmiyeGor()
         {
-            
-
             return View(_adminManager.GetYevmiyeler());
+        }
+
+        public IActionResult YevmiyeGiris()
+        {
+            var calisanList = _adminManager.GetCalisans();
+            return View(calisanList);
+        }
+
+        public IActionResult YevmiyeKaydet(DateTime Tarih, List<int> isWorked)
+        {
+            // Öncelikle tüm çalışanları alın
+            if (_adminManager.KaydetYevmiye(Tarih, isWorked))
+            {
+                ViewBag.Onay = "Yevmiyeler Kaydedildi";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Onay = "bir hata oluştu";
+                return RedirectToAction("YevmiyeGiris", "Admin");
+            }
         }
 
         public IActionResult OdemeGiris()
@@ -34,34 +94,14 @@ namespace Karakoç.Controllers
             return View(odemelist);
         }
 
-        /// <summary>
-        /// ////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-
-
+       
         public class OdemelerViewModel
         {
             public List<Odemeler> Odemeler { get; set; }
             public decimal ToplamTutar { get; set; }
         }
 
-        public IActionResult Odemeler()
-        {
-            var odemeListesi = _adminManager.GetOdeme(); // AdminManager'dan Odemeler'i al
-            var toplamTutar = odemeListesi.Sum(o => o.Amount); // Toplam tutarı hesapla
-
-            // ViewModel'i doğrudan burada tanımla
-            var odemeViewModel = new OdemelerViewModel
-            {
-                Odemeler = odemeListesi,
-                ToplamTutar = toplamTutar
-            };
-
-            return View(odemeViewModel); // ViewModel'i View'a gönder
-            
-        }
-
-
+     
         [HttpPost]
         public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar)
         {

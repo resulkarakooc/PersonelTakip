@@ -17,86 +17,11 @@
             <div class="row">
                 <div class="col-lg-9">
 
-                    <div class="users-table table-wrapper">
-                        <div class="table-container">
-
-                            <style>
-                                /* Tablo için temel ayarlar */
-                                .table {
-                                    width: 100% !important;
-                                    max-width: 100% !important;
-                                    margin-bottom: 1rem !important;
-                                    background-color: transparent !important;
-                                    border-collapse: collapse !important;
-                                }
-
-                                    .table th,
-                                    .table td {
-                                        padding: 0.75rem !important;
-                                        vertical-align: top !important;
-                                        border-top: 1px solid #dee2e6 !important;
-                                    }
-
-                                    /* Başlık satırı için ayarlar */
-                                    .table thead th {
-                                        vertical-align: bottom !important;
-                                        border-bottom: 2px solid #dee2e6 !important;
-                                    }
-
-                                    .table tbody + tbody {
-                                        border-top: 2px solid #dee2e6 !important;
-                                    }
-
-                                /* Gündüz modu: table-primary */
-                                .table-primary {
-                                    background-color: #e9f5ff !important;
-                                }
-
-                                    .table-primary th,
-                                    .table-primary td {
-                                        background-color: #e9f5ff !important;
-                                        color: #212529 !important;
-                                    }
-
-                                    .table-primary thead th {
-                                        background-color: #d1e7fd !important;
-                                        border-color: #111111 !important;
-                                    }
+                    <div class="">
+                        <div class="">
 
 
-                                /* Gece modu: table-dark */
-                                .table-dark {
-                                    background-color: #343a40 !important;
-                                    color: black !important;
-                                }
-
-                                    .table-dark th,
-                                    .table-dark td {
-                                        border-color: #454d55 !important;
-                                    }
-
-                                    .table-dark thead th {
-                                        background-color: #495057 !important;
-                                        border-color: #6c757d !important;
-                                    }
-
-                                    .table-dark tfoot tr td {
-                                            
-                                        font-weight: bold !important;
-                                        color: black!important;
-                                        border-top: 2px solid #454d55 !important;
-                                    }
-
-                                /* Tfoot ayarları (toplam miktar için) */
-                                tfoot tr td {
-                                    font-weight: bold !important;
-                                    border-top: 2px solid #dee2e6 !important;
-                                    text-align: right !important;
-                                }
-
-                            </style>
-
-                            <table class="table table-primary">
+                            <table class="table table-bordered table-primary">
                                 <thead>
                                     <tr>
                                         <th>Çalişan</th>
@@ -150,12 +75,12 @@
         const table = document.querySelector('.table');
 
         // Light moddaysa Dark moda, Dark moddaysa Light moda geçiş yapar
-        if (table.classList.contains('table-primary')) {
-            table.classList.remove('table-primary');
-            table.classList.add('table-dark');
-        } else {
+        if (table.classList.contains('table-dark')) {
             table.classList.remove('table-dark');
             table.classList.add('table-primary');
+        } else {
+            table.classList.remove('table-primary');
+            table.classList.add('table-dark');
         }
     });
 
