@@ -1,5 +1,6 @@
 ﻿using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
+using System.Web.Mvc;
 
 namespace Karakoç.Bussiness.concrete
 {
@@ -37,11 +38,15 @@ namespace Karakoç.Bussiness.concrete
 
         public bool Register(string Rusername, string Rlastname, string Remail, string Rpassword)
         {
+            
+
+
             var user = _context.Calisans.FirstOrDefault(c => c.Email == Remail);
             if (user == null) //mevcut kayıt yok ise 
             {
                 var newCalisan = new Calisan
                 {
+                    
                     Name = Rusername,
                     Surname = Rlastname,
                     Email = Remail,

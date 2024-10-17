@@ -38,15 +38,19 @@
                     <td>@Model.CalısanId</td>
                 </tr>
                 <tr>
-                    <td>Diğer Bilgiler</td>
+                    <td>Email</td>
                     <td>@Model.Email</td> <!-- Diğer bilgileri buraya ekleyin -->
-                    <td>@Model.KayıtTarihi</td> <!-- Diğer bilgileri buraya ekleyin -->
+                    
+                </tr>
+                <tr>
+                    <td>Kayıt Tarihi</td>
+                    <td>@Model.KayıtTarihi?.ToString("dd.MM.yyyy")</td> <!-- Diğer bilgileri buraya ekleyin --></td>
                 </tr>
             </tbody>
         </table>
 
         
-        <h1>Çalışanların Yevmiye Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h1>
+        <h1 class="main-title">Çalışanların Yevmiye Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h1>
 
         <div class="table-responsive">
             <table class="table table-bordered table-primary">
@@ -76,7 +80,7 @@
             </table>
         </div>
 
-        <h2>Ödeme Bilgileri</h2>
+        <h2 class="main-title">Ödeme Bilgileri</h2>
         <div class="table-responsive">
             <table class="table table-bordered table-success">
                 <thead>
@@ -90,7 +94,7 @@
                     {
                         <tr>
                             <td>@odeme.Tarih.ToShortDateString()</td>
-                            <td>@odeme.Amount</td>
+                            <td>@odeme.Amount.ToString("C2")</td>
                         </tr>
                     }
                 </tbody>

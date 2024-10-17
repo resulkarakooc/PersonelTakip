@@ -1,22 +1,9 @@
-﻿@model List<Karakoç.Models.Yevmiyeler> // Modelinizi uygun şekilde ayarlayın
+﻿@model List<Karakoç.Models.Calisan> // Modelinizi uygun şekilde ayarlayın
 @{
     ViewData["Title"] = "CalisanList";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
-    // Mevcut ayın gün sayısını ve toplam yevmiye hesaplamalarını burada yapın
-    var currentMonth = DateTime.Now.Month;
-    var currentYear = DateTime.Now.Year;
-
-    // Çalışanların toplam yevmiyelerini hesaplayın
-    var calisanlar = Model.GroupBy(y => new { y.CalisanId, y.Calisan.Name, y.Calisan.Surname })
-        .Select(g => new
-        {
-            CalisanId = g.Key.CalisanId,
-            Name = g.Key.Name,
-            Surname = g.Key.Surname,
-            TotalYevmiye = g.Count(y => y.IsWorked == true) // True olan yevmiyeleri say
-        })
-        .ToList();
+    
 }
 
 
@@ -29,19 +16,21 @@
             <thead>
                 <tr>
                     <th>Çalışan</th>
-                    <th>Toplam Yevmiye</th>
+                    <th>Kayıt Tarihi</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var calisan in calisanlar)
+                @foreach (var calisan in Model)
                 {
                     <tr>
                         <td>
-                            <a href="@Url.Action("Calisan","Admin", new { id = calisan.CalisanId })">
+                            <a href="@Url.Action("Calisan","Admin", new { id = calisan.CalısanId })">
                                 @calisan.Name @calisan.Surname
                             </a>
                         </td>
-                        <td>@calisan.TotalYevmiye</td>
+                        <td>@calisan.KayıtTarihi?.ToString("dd.MM.yyyy")</td>
+
+                        
                     </tr>
                 }
             </tbody>

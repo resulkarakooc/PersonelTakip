@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -18,33 +17,49 @@
 </head>
 
 <body>
+    
+
+
+
     <div class="layer"></div>
     <main class="page-center">
         <article class="sign-up">
-            <h1 class="sign-up__title">Get started</h1>
-            <p class="sign-up__subtitle">Start creating the best possible user experience for you customers</p>
-            <form class="sign-up-form form" action="" method="">
+            <h1 class="sign-up__title">Karakoç İnşaat</h1>
+            <p class="sign-up__subtitle">Çalışan Kayıt Sistemi</p>
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div class="sign-up__subtitle">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+            @if (ViewBag.Info != null)
+            {
+                <div style="color:red" class="sign-up__subtitle">
+                    @ViewBag.Info
+                </div>
+            }
+            <form class="sign-up-form form" action="/Login/Register" method="post">
                 <label class="form-label-wrapper">
-                    <p class="form-label">Name</p>
-                    <input class="form-input" type="text" placeholder="Enter your name" required>
+                    <p class="form-label">İsim</p>
+                    <input class="form-input" name="Rusername" type="text" placeholder="Enter your name" required>
                 </label>
                 <label class="form-label-wrapper">
-                    <p class="form-label">Team</p>
-                    <input class="form-input" type="email" placeholder="Enter your Team name" required>
+                    <p class="form-label">Soyad</p>
+                    <input class="form-input" name="Rlastname" type="text" placeholder="Enter your lasname" required>
                 </label>
                 <label class="form-label-wrapper">
                     <p class="form-label">Email</p>
-                    <input class="form-input" type="email" placeholder="Enter your email" required>
+                    <input class="form-input" name="Remail" type="email" placeholder="Enter your Email" required>
                 </label>
                 <label class="form-label-wrapper">
                     <p class="form-label">Password</p>
-                    <input class="form-input" type="password" placeholder="Enter your password" required>
+                    <input class="form-input" name="Rpassword" type="password" placeholder="Enter your password" required>
                 </label>
-                <label class="form-checkbox-wrapper">
-                    <input class="form-checkbox" type="checkbox" required>
-                    <span class="form-checkbox-label">Remember me next time</span>
-                </label>
-                <button class="form-btn primary-default-btn transparent-btn">Sign in</button>
+                <br />
+                <a href="Giris" style="color:blue"> Giriş Yap </a>
+                <br /> <br />
+
+                <button type="submit" class="form-btn primary-default-btn transparent-btn">Sign in</button>
             </form>
         </article>
     </main>

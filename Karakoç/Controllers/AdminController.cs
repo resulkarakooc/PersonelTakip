@@ -16,6 +16,8 @@ namespace Karakoç.Controllers
             _adminManager = adminManager;
         }
 
+
+
         public IActionResult Index()
         {
             // Tüm çalışanları al
@@ -54,6 +56,11 @@ namespace Karakoç.Controllers
             }
 
             return View(calisan);
+        }
+
+        public IActionResult CalisanList()
+        {
+            return View(_adminManager.GetCalisans());
         }
 
 
