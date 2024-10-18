@@ -8,6 +8,7 @@ namespace Karakoç.Models
         public Calisan()
         {
             Giderlers = new HashSet<Giderler>();
+            Mesais = new HashSet<Mesai>();
             Odemelers = new HashSet<Odemeler>();
             Yevmiyelers = new HashSet<Yevmiyeler>();
         }
@@ -18,8 +19,11 @@ namespace Karakoç.Models
         public DateTime? KayıtTarihi { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public long? TcKimlik { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public virtual ICollection<Giderler> Giderlers { get; set; }
+        public virtual ICollection<Mesai> Mesais { get; set; }
         public virtual ICollection<Odemeler> Odemelers { get; set; }
         public virtual ICollection<Yevmiyeler> Yevmiyelers { get; set; }
     }

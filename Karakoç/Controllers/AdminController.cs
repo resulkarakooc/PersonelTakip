@@ -75,6 +75,33 @@ namespace Karakoç.Controllers
             return View(calisanList);
         }
 
+        public IActionResult MesaiGiris()
+        {
+            var calisanList = _adminManager.GetCalisans();
+            return View(calisanList);
+        }
+
+        public IActionResult MesaiGor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult MesaiKaydet(DateTime Tarih, List<int> isWorked)
+        {
+            // Öncelikle tüm çalışanları alın
+            if (_adminManager.KaydetYevmiye(Tarih, isWorked))
+            {
+                ViewBag.Onay = "Yevmiyeler Kaydedildi";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.Onay = "bir hata oluştu";
+                return RedirectToAction("YevmiyeGiris", "Admin");
+            }
+        }
+
         public IActionResult YevmiyeKaydet(DateTime Tarih, List<int> isWorked)
         {
             // Öncelikle tüm çalışanları alın
@@ -89,6 +116,8 @@ namespace Karakoç.Controllers
                 return RedirectToAction("YevmiyeGiris", "Admin");
             }
         }
+
+        
 
         public IActionResult OdemeGiris()
         { 

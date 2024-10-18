@@ -7,10 +7,6 @@ namespace Karakoç.Models
 {
     public partial class ResulContext : DbContext
     {
-        public ResulContext()
-        {
-        }
-
         public ResulContext(DbContextOptions<ResulContext> options)
             : base(options)
         {
@@ -18,16 +14,9 @@ namespace Karakoç.Models
 
         public virtual DbSet<Calisan> Calisans { get; set; } = null!;
         public virtual DbSet<Giderler> Giderlers { get; set; } = null!;
+        public virtual DbSet<Mesai> Mesais { get; set; } = null!;
         public virtual DbSet<Odemeler> Odemelers { get; set; } = null!;
         public virtual DbSet<Yevmiyeler> Yevmiyelers { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("name=DefaultConnection");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +27,8 @@ namespace Karakoç.Models
                 entity.ToTable("Calisan");
 
                 entity.Property(e => e.CalısanId).HasColumnName("CalısanID");
+
+                entity.Property(e => e.BirthDate).HasColumnType("date");
 
                 entity.Property(e => e.Email).HasMaxLength(60);
 
@@ -69,6 +60,23 @@ namespace Karakoç.Models
                     .HasForeignKey(d => d.CalisanId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Giderler_Calisan");
+            });
+
+            modelBuilder.Entity<Mesai>(entity =>
+            {
+                entity.ToTable("Mesai");
+
+                entity.Property(e => e.MesaiId).HasColumnName("MesaiID");
+
+                entity.Property(e => e.IsWorked).HasColumnName("isWorked");
+
+                entity.Property(e => e.Tarih).HasColumnType("date");
+
+                entity.HasOne(d => d.Calisan)
+                    .WithMany(p => p.Mesais)
+                    .HasForeignKey(d => d.CalisanId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mesai_Calisan");
             });
 
             modelBuilder.Entity<Odemeler>(entity =>

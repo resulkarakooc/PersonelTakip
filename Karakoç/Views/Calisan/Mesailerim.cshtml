@@ -1,6 +1,6 @@
-﻿@model List<Yevmiyeler>
+﻿@model List<Mesai>
 @{
-    ViewData["Title"] = "Puantajım";
+    ViewData["Title"] = "Mesailerim";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
@@ -81,7 +81,9 @@
                                                 else
                                                 {
                                                     DateTime gunTarihi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, gunSayaci);
-                                                    var yevmiye = Model.FirstOrDefault(y => y.Tarih.HasValue && y.Tarih.Value.Date == gunTarihi.Date);
+                                                    var yevmiye = Model.FirstOrDefault(y => y.Tarih.Date == gunTarihi.Date);
+
+
 
                                                     // Arkaplan rengi belirleme
                                                     string cssClass = yevmiye == null ? "red-background" :
@@ -128,3 +130,4 @@
         </ul>
     </div>
 </footer>
+

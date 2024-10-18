@@ -70,9 +70,27 @@ namespace Karakoç.Controllers
             return View(yevmiyeKayitlari);
         }
 
+
+
+        [HttpGet]
+        public IActionResult Mesailerim()
+        {
+            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+
+
+            // Veritabanından bu kullanıcıya ait yevmiye kayıtlarını çek
+            var yevmiyeKayitlari = _resulContext.Mesais
+                .Where(y => y.CalisanId == kullaniciId)
+                .ToList();
+
+            return View(yevmiyeKayitlari);
+            
+        }
+
         public IActionResult Odemeler() 
         {
-            var liste = _resulContext.Odemelers.Where(y => y.CalisanId == 1).ToList(); 
+            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+            var liste = _resulContext.Odemelers.Where(y => y.CalisanId == kullaniciId).ToList(); 
             
 
             return View(liste); 

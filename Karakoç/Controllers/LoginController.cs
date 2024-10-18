@@ -1,19 +1,43 @@
 ﻿using Karakoç.Bussiness.concrete;
+using MernisServiceReference;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
 
 public class LoginController : Controller
 {
     private readonly LoginManager _loginManager;
+    private readonly KPSPublicSoapClient _mernisClient;
 
     public LoginController(LoginManager loginManager)
     {
         _loginManager = loginManager;
+        _mernisClient = new KPSPublicSoapClient(KPSPublicSoapClient.EndpointConfiguration.KPSPublicSoap);
     }
 
     public IActionResult Index()
     {
         return View();
     }
+
+    public async Task<bool> TCKimlikDogrula(long tckimlikNo, string ad, string soyad, int dogumYili)
+    {
+        var requestBody = new TCKimlikNoDogrulaRequestBody(tckimlikNo, ad, soyad, dogumYili);
+        var request = new TCKimlikNoDogrulaRequest(requestBody);
+
+        try
+        {
+            var response = await _mernisClient.TCKimlikNoDogrulaAsync(request);
+            return response.Body.TCKimlikNoDogrulaResult;
+        }
+        catch (Exception ex)
+        {
+            // Hata durumunu yönet
+            Console.WriteLine("Mernis doğrulama hatası: " + ex.Message);
+            return false;
+        }
+    }
+
 
     [HttpPost]
     public IActionResult Login(string username, string password)
@@ -30,25 +54,36 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(string Rusername, string Rlastname, string Remail, string Rpassword)
+    public async Task<IActionResult> Register(long RTC, string Rusername, string Rlastname, string Remail, DateTime RBirth, string Rpassword)
     {
-        // Kayıt işlemi geçerli mi kontrol ediliyor
-        if (!ModelState.IsValid)
-        {
-            ViewBag.Info = "Geçersiz bilgi girdiniz.";
-            return View("KayıtOl");
-        }
+        // Mernis doğrulaması
+        bool dogrulamaSonucu = await TCKimlikDogrula(RTC, Rusername, Rlastname, RBirth.Year);
 
-        // Kayıt işlemi yapılmaya çalışılıyor
-        if (_loginManager.Register(Rusername, Rlastname, Remail, Rpassword))
+        if (dogrulamaSonucu)
         {
-            ViewBag.SuccessMessage = "Kayıt işlemi başarılı!";
-            return View("Giris"); // Kayıt başarılıysa giriş sayfasına yönlendiriliyor
+            // Kayıt işlemi geçerli mi kontrol ediliyor
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Info = "Geçersiz bilgi girdiniz.";
+                return View("KayıtOl");
+            }
+
+            // Kayıt işlemi yapılmaya çalışılıyor
+            if (_loginManager.Register(RTC, Rusername, Rlastname, Remail, RBirth, Rpassword))
+            {
+                ViewBag.SuccessMessage = "Kayıt işlemi başarılı!";
+                return View("Giris"); // Kayıt başarılıysa giriş sayfasına yönlendiriliyor
+            }
+            else
+            {
+                ViewBag.Info = "Mail zaten kullanılıyor";
+                return View("KayıtOl"); // Kayıt başarısızsa tekrar kayıt sayfasına dönülüyor
+            }
         }
         else
         {
-            ViewBag.Info = "Mail zaten kullanılıyor";
-            return View("KayıtOl"); // Kayıt başarısızsa tekrar kayıt sayfasına dönülüyor
+            ViewBag.Info = "MERNİS Veritabanında Kişi Bulunamadı.";
+            return View("KayıtOl");
         }
     }
 

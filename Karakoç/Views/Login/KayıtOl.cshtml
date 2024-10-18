@@ -40,23 +40,33 @@
             }
             <form class="sign-up-form form" action="/Login/Register" method="post">
                 <label class="form-label-wrapper">
+                    <p class="form-label">TC. KİMLİK</p>
+                    <input class="form-input" name="RTC" type="number" placeholder="TC Kimlik" required>
+                </label>
+                <label class="form-label-wrapper">
                     <p class="form-label">İsim</p>
-                    <input class="form-input" name="Rusername" type="text" placeholder="Enter your name" required>
+                    <input class="form-input" name="Rusername" type="text" placeholder="İsim" required>
                 </label>
                 <label class="form-label-wrapper">
                     <p class="form-label">Soyad</p>
-                    <input class="form-input" name="Rlastname" type="text" placeholder="Enter your lasname" required>
+                    <input class="form-input" name="Rlastname" type="text" placeholder="Soyisim" required>
                 </label>
                 <label class="form-label-wrapper">
                     <p class="form-label">Email</p>
-                    <input class="form-input" name="Remail" type="email" placeholder="Enter your Email" required>
+                    <input class="form-input" name="Remail" type="email" placeholder="Mail Adresi" required>
+                </label>
+
+                
+                <label class="form-label-wrapper">
+                    <p class="form-label">Email</p>
+                    <input class="form-input" name="RBirth" type="date" placeholder="Doğum Tarihi" required>
                 </label>
                 <label class="form-label-wrapper">
                     <p class="form-label">Password</p>
                     <input class="form-input" name="Rpassword" type="password" placeholder="Enter your password" required>
                 </label>
                 <br />
-                <a href="Giris" style="color:blue"> Giriş Yap </a>
+                <a href="~/Login/Giris" style="color:blue"> Giriş Yap </a>
                 <br /> <br />
 
                 <button type="submit" class="form-btn primary-default-btn transparent-btn">Sign in</button>

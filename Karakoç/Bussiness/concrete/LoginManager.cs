@@ -1,6 +1,6 @@
 ﻿using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
-using System.Web.Mvc;
+
 
 namespace Karakoç.Bussiness.concrete
 {
@@ -15,6 +15,8 @@ namespace Karakoç.Bussiness.concrete
 
         public bool Login(string username, string password, HttpContext httpContext)
         {
+
+
             var user = _context.Calisans
                 .FirstOrDefault(c => c.Email == username && c.Password == password);
 
@@ -36,21 +38,21 @@ namespace Karakoç.Bussiness.concrete
             }
         }
 
-        public bool Register(string Rusername, string Rlastname, string Remail, string Rpassword)
+        public bool Register(long TC,string Rusername, string Rlastname, string Remail,DateTime BirthDay, string Rpassword)
         {
-            
-
+           
 
             var user = _context.Calisans.FirstOrDefault(c => c.Email == Remail);
             if (user == null) //mevcut kayıt yok ise 
             {
                 var newCalisan = new Calisan
                 {
-                    
+                    TcKimlik = TC,
                     Name = Rusername,
                     Surname = Rlastname,
                     Email = Remail,
                     KayıtTarihi = DateTime.Now,
+                    BirthDate = BirthDay,
                     Password = Rpassword
                 };
                 // Yeni çalışanı veritabanına ekle ve değişiklikleri kaydet

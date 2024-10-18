@@ -31,6 +31,11 @@ namespace Karakoç.Bussiness.concrete
             return _resulContext.Calisans.ToList();
         }
 
+        public List<Mesai> GetMesai()
+        {
+            return _resulContext.Mesais.ToList();
+        }
+
         public List<Odemeler> GetOdeme()
         {
             var odemeListesi = _resulContext.Odemelers
@@ -61,6 +66,38 @@ namespace Karakoç.Bussiness.concrete
             };
             _resulContext.Odemelers.Add(odeme);
             _resulContext.SaveChanges();
+            return true;
+        }
+
+        public bool KaydetMesai(DateTime Tarih, List<int> isWorked)
+        {
+
+            var calisanlar = _resulContext.Calisans.ToList();
+
+            foreach (var calisan in calisanlar)
+            {
+                // Bu çalışanın seçilen tarihte bir kaydı olup olmadığını kontrol et
+                var mesai = _resulContext.Mesais.FirstOrDefault(y => y.CalisanId == calisan.CalısanId && y.Tarih == Tarih);
+
+                // Eğer kayıt varsa güncelle
+                if (mesai != null)
+                {
+                    mesai.IsWorked = isWorked.Contains(calisan.CalısanId);
+                }
+                // Eğer kayıt yoksa yeni bir yevmiye kaydı oluştur
+                else
+                {
+                    var yeniMesai = new Mesai
+                    {
+                        
+                        CalisanId = calisan.CalısanId,
+                        Tarih = Tarih,
+                        IsWorked = isWorked.Contains(calisan.CalısanId)
+                    };
+                    _resulContext.Mesais.Add(yeniMesai);
+                }
+                _resulContext.SaveChanges();
+            }
             return true;
         }
 
