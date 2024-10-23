@@ -83,22 +83,22 @@ namespace Karakoç.Controllers
 
         public IActionResult MesaiGor()
         {
-            return View();
+            return View(_adminManager.GetMesai());
         }
 
         [HttpPost]
         public IActionResult MesaiKaydet(DateTime Tarih, List<int> isWorked)
         {
             // Öncelikle tüm çalışanları alın
-            if (_adminManager.KaydetYevmiye(Tarih, isWorked))
+            if (_adminManager.KaydetMesai(Tarih, isWorked))
             {
-                ViewBag.Onay = "Yevmiyeler Kaydedildi";
+                ViewBag.Onay = "Mesailer Kaydedildi";
                 return RedirectToAction("Index");
             }
             else
             {
                 ViewBag.Onay = "bir hata oluştu";
-                return RedirectToAction("YevmiyeGiris", "Admin");
+                return RedirectToAction("MesaiGiris", "Admin");
             }
         }
 

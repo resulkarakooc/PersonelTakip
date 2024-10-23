@@ -13,6 +13,20 @@ namespace Karakoç.Bussiness.concrete
             _context = context;
         }
 
+        public bool Reset(string email)
+        {
+            var user = _context.Calisans
+               .FirstOrDefault(c => c.Email == email);
+            if(user == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public bool Login(string username, string password, HttpContext httpContext)
         {
 
@@ -38,10 +52,8 @@ namespace Karakoç.Bussiness.concrete
             }
         }
 
-        public bool Register(long TC,string Rusername, string Rlastname, string Remail,DateTime BirthDay, string Rpassword)
+        public bool Register(long TC, string Rusername, string Rlastname, string Remail, DateTime BirthDay, string Rpassword)
         {
-           
-
             var user = _context.Calisans.FirstOrDefault(c => c.Email == Remail);
             if (user == null) //mevcut kayıt yok ise 
             {

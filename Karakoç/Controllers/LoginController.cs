@@ -1,4 +1,5 @@
 ﻿using Karakoç.Bussiness.concrete;
+using Karakoç.MailService;
 using MernisServiceReference;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -13,11 +14,6 @@ public class LoginController : Controller
     {
         _loginManager = loginManager;
         _mernisClient = new KPSPublicSoapClient(KPSPublicSoapClient.EndpointConfiguration.KPSPublicSoap);
-    }
-
-    public IActionResult Index()
-    {
-        return View();
     }
 
     public async Task<bool> TCKimlikDogrula(long tckimlikNo, string ad, string soyad, int dogumYili)
@@ -36,6 +32,41 @@ public class LoginController : Controller
             Console.WriteLine("Mernis doğrulama hatası: " + ex.Message);
             return false;
         }
+    }
+    Random random = new Random();
+
+
+    [HttpPost]
+    public IActionResult PasswordReset(string Reset_Mail)
+    {
+
+
+        if (_loginManager.Reset(Reset_Mail)) //bu e posta var mı
+        {
+            int sayi = random.Next(111111, 999999);
+            if (MailService.SendEmail(Reset_Mail, "Şifre Sıfırlama", $"Şifre Sıfırlama Kodun: {sayi}"))
+            {
+                ViewBag.Sent = "Gönderildi";
+                ViewBag.Sayi = sayi;
+            }
+            else
+            {
+                ViewBag.Sent = "Hata Oluştu ve Gönderilemedi";
+            }
+        }
+        else
+        {
+            ViewBag.Sent = "Girdiğiniz E-Posta Sistemde Kayıtlı Değil";
+
+        }
+
+        return View();
+
+    }
+
+    public IActionResult PasswordReset()
+    {
+        return View();
     }
 
 
@@ -86,8 +117,6 @@ public class LoginController : Controller
             return View("KayıtOl");
         }
     }
-
-
 
     public IActionResult Giris(string Email, string password)
     {

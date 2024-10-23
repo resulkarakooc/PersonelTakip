@@ -11,6 +11,7 @@ builder.Services.AddScoped<CalisanManager>();
 builder.Services.AddScoped<OrganizerManager>();
 builder.Services.AddScoped<AdminManager>();
 
+
 builder.Services.AddDbContext<ResulContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

@@ -33,7 +33,10 @@ namespace Karakoç.Bussiness.concrete
 
         public List<Mesai> GetMesai()
         {
-            return _resulContext.Mesais.ToList();
+            var yevmiyeList = _resulContext.Mesais
+                           .Include(o => o.Calisan)
+                           .ToList();
+            return yevmiyeList;
         }
 
         public List<Odemeler> GetOdeme()
