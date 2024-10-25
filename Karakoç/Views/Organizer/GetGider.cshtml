@@ -51,6 +51,20 @@
     <div class="alert alert-info" role="alert">
         Toplam Tutar: @Model.ToplamTutar.ToString("C") <!-- Para formatında göster -->
     </div>
+    <br />
+    <button class="btn btn-danger" onclick="logOut()">Oturumu Kapat</button>
+    <button class="btn btn-primary" onclick="GiderGir()">Gider Ekle</button>
+
+
+    <script>
+        function logOut() {
+            window.location.href = '@Url.Action("LogOut", "Login")';
+        }
+        function GiderGir() {
+            window.location.href = '@Url.Action("Giderler", "Organizer")';
+        }
+    </script>
 
 </body>
+
 </html>

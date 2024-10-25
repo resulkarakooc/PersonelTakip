@@ -11,50 +11,51 @@
     int dayCount = DateTime.DaysInMonth(currentYear, currentMonth);
 }
 
+
+<!---->
 <main class="main users chart-page" id="skip-target">
     <div class="container">
 
-
+        <!-- Çalışan Bilgileri -->
         <h2 class="main-title">@Model.Name @Model.Surname Bilgileri</h2>
-
-        <table class="table table-bordered table-primary">
-            <thead>
-                <tr>
-                    <th>Alan</th>
-                    <th>Değer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>İsim</td>
-                    <td>@Model.Name</td>
-                </tr>
-                <tr>
-                    <td>Soyisim</td>
-                    <td>@Model.Surname</td>
-                </tr>
-                <tr>
-                    <td>İd</td>
-                    <td>@Model.CalısanId</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>@Model.Email</td> <!-- Diğer bilgileri buraya ekleyin -->
-                    
-                </tr>
-                <tr>
-                    <td>Kayıt Tarihi</td>
-                    <td>@Model.KayıtTarihi?.ToString("dd.MM.yyyy")</td> <!-- Diğer bilgileri buraya ekleyin --></td>
-                </tr>
-            </tbody>
-        </table>
-
-        
-        <h1 class="main-title">Çalışanların Yevmiye Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h1>
-
         <div class="table-responsive">
-            <table class="table table-bordered table-primary">
-                <thead>
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Alan</th>
+                        <th>Değer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>İsim</td>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <td>Soyisim</td>
+                        <td>@Model.Surname</td>
+                    </tr>
+                    <tr>
+                        <td>İd</td>
+                        <td>@Model.CalısanId</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <td>Kayıt Tarihi</td>
+                        <td>@Model.KayıtTarihi?.ToString("dd.MM.yyyy")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Yevmiye Takvimi Puantaj -->
+        <h2 class="main-title">Çalışanın Yevmiye Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
                     <tr>
                         <th>Gün</th>
                         <th>Çalıştı mı?</th>
@@ -68,10 +69,14 @@
 
                         <tr>
                             <td>@i</td>
-                            <td style="background-color: @(yevmiye != null && yevmiye.IsWorked == true ? "blue" : "transparent")">
+                            <td class="text-center" style="background-color: @(yevmiye != null && yevmiye.IsWorked == true ? "#DFF0D8" : "#F2DEDE")">
                                 @if (yevmiye != null && yevmiye.IsWorked == true)
                                 {
-                                    <span>@i</span>
+                                    <span>✔</span>
+                                }
+                                else
+                                {
+                                    <span>✘</span>
                                 }
                             </td>
                         </tr>
@@ -80,17 +85,53 @@
             </table>
         </div>
 
+
+        <!-- Yevmiye Takvimi Mesai -->
+        <h2 class="main-title">Çalışanın mesai Takvimi - @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth) @currentYear</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Gün</th>
+                        <th>Çalıştı mı?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i <= dayCount; i++)
+                    {
+                        var tarih = new DateTime(currentYear, currentMonth, i);
+                        var yevmiye = Model.Mesais.FirstOrDefault(y => y.Tarih == tarih.Date);
+
+                        <tr>
+                            <td>@i</td>
+                            <td class="text-center" style="background-color: @(yevmiye != null && yevmiye.IsWorked == true ? "#DFF0D8" : "#F2DEDE")">
+                                @if (yevmiye != null && yevmiye.IsWorked == true)
+                                {
+                                    <span>✔</span>
+                                }
+                                else
+                                {
+                                    <span>✘</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Ödemeler -->
         <h2 class="main-title">Ödeme Bilgileri</h2>
         <div class="table-responsive">
-            <table class="table table-bordered table-success">
-                <thead>
+            <table class="table table-striped table-hover table-bordered">
+                <thead class="thead-dark">
                     <tr>
                         <th>Tarih</th>
                         <th>Miktar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var odeme in Model.Odemelers) // Model.Odemelers kısmını uygun şekilde güncelleyin
+                    @foreach (var odeme in Model.Odemelers)
                     {
                         <tr>
                             <td>@odeme.Tarih.ToShortDateString()</td>
@@ -100,7 +141,5 @@
                 </tbody>
             </table>
         </div>
-
-
     </div>
 </main>

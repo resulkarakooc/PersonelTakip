@@ -33,13 +33,13 @@ public class LoginController : Controller
             return false;
         }
     }
-    Random random = new Random();
+
 
 
     [HttpPost]
     public IActionResult PasswordReset(string Reset_Mail)
     {
-
+        Random random = new Random();
 
         if (_loginManager.Reset(Reset_Mail)) //bu e posta var mı
         {
@@ -75,7 +75,23 @@ public class LoginController : Controller
     {
         if (_loginManager.Login(username, password, HttpContext)) // HttpContexti doğrudan kullanıcam
         {
-            return RedirectToAction("Home", "Calisan");
+            if (HttpContext.Session.GetInt32("Authority") == 1) //Calisan
+            {
+                return RedirectToAction("Home", "Calisan");
+            }
+            else if (HttpContext.Session.GetInt32("Authority") == 2) //Organizer
+            {
+                return RedirectToAction("GetGider", "Organizer");
+            }
+            else if (HttpContext.Session.GetInt32("Authority") == 3) //Admin
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Email veya Parola Yanlış";
+                return View("Giris");
+            }
         }
         else
         {
@@ -126,5 +142,11 @@ public class LoginController : Controller
     public IActionResult KayıtOl()
     {
         return View();
+    }
+
+    public IActionResult LogOut()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction("Giris", "Login");
     }
 }

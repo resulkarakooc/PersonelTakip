@@ -1,6 +1,7 @@
 ﻿using Karakoç.Bussiness.abstracts;
 using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
+using MernisServiceReference;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -16,13 +17,77 @@ namespace Karakoç.Controllers
             _adminManager = adminManager;
         }
 
+        public async  Task<IActionResult> GetYevmiye()
+        {
+            var yevmiyeler = await _adminManager.GetYevmiyeler();
+
+            var veriler = yevmiyeler.Select(c => new
+            {
+                
+                c.Tarih,
+                c.IsWorked,
+                CalisanID = c.CalisanId,
+                CalisanAd = c.Calisan.Name,
+                CalisanSoyad = c.Calisan.Surname
+
+            }).ToList();
+
+            // Normal olarak view döndür
+            return Json(veriler);
+        }
+
+        public IActionResult YevmiyeGor()
+        {
+
+
+            return View();  
+        }
+
+
+        public IActionResult MesaiGor()
+        {
+
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> GetMesai()
+        {
+            var yevmiyeler = await _adminManager.GetMesai();
+
+            var veriler = yevmiyeler.Select(c => new
+            {
+                
+                c.Tarih,
+                c.IsWorked,
+                CalisanID = c.CalisanId,
+                CalisanAd = c.Calisan.Name,
+                CalisanSoyad = c.Calisan.Surname
+
+            }).ToList();
+
+            // Normal olarak view döndür
+            return Json(veriler);
+        }
+
+
+
+        // İlk yüklendiğinde mevcut ay ve yıl bilgileri ile verileri yükleyen aksiyon
 
 
         public IActionResult Index()
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
             // Tüm çalışanları al
             var calisanlar = _adminManager.GetCalisans();
-            var yevmiyeler = _adminManager.GetYevmiyeler();
+            var yevmiyeler = _adminManager.GetYevmiyelers();
 
             // Çalışan sayısını ViewBag ile gönder
             ViewBag.CalisanSayisi = calisanlar.Count;
@@ -43,10 +108,20 @@ namespace Karakoç.Controllers
             return View(); // Çalışanları da model olarak gönder
         }
 
+        [Route("/Admin/Calisan/{id}")]
+        public async Task<IActionResult> GetCalisan(int id)
+        {
+            var calisan = await _adminManager.GetCalisanById(id);
+            return Json(calisan);
+        }
 
         [Route("/Admin/Calisan/{id}")]
         public IActionResult Calisan(int id)
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
 
             var calisan = _adminManager.GetCalisanById(id);
 
@@ -60,31 +135,40 @@ namespace Karakoç.Controllers
 
         public IActionResult CalisanList()
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
             return View(_adminManager.GetCalisans());
         }
 
 
-        public IActionResult YevmiyeGor()
-        {
-            return View(_adminManager.GetYevmiyeler());
-        }
+
 
         public IActionResult YevmiyeGiris()
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
             var calisanList = _adminManager.GetCalisans();
             return View(calisanList);
         }
 
         public IActionResult MesaiGiris()
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
             var calisanList = _adminManager.GetCalisans();
             return View(calisanList);
         }
 
-        public IActionResult MesaiGor()
-        {
-            return View(_adminManager.GetMesai());
-        }
+        
 
         [HttpPost]
         public IActionResult MesaiKaydet(DateTime Tarih, List<int> isWorked)
@@ -117,33 +201,57 @@ namespace Karakoç.Controllers
             }
         }
 
-        
+
 
         public IActionResult OdemeGiris()
-        { 
-            return View(_adminManager.GetCalisans()); 
+        {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
+            return View(_adminManager.GetCalisans());
         }
 
         public IActionResult OdemeGor()
         {
+
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
             var odemelist = _adminManager.GetOdeme().ToList();
             return View(odemelist);
         }
 
-       
+
         public class OdemelerViewModel
         {
             public List<Odemeler> Odemeler { get; set; }
             public decimal ToplamTutar { get; set; }
         }
 
-     
+
         [HttpPost]
         public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar)
         {
             _adminManager.KaydetOdeme(CalisanId, Aciklama, tutar);
             ViewBag.Bilgi = "Kayıt Edildi";
             return RedirectToAction("OdemeGiris", "Admin");
+        }
+
+        public bool Control()
+        {
+            if (HttpContext.Session.GetInt32("Authority") == 3) //admin ise
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

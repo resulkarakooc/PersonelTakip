@@ -7,6 +7,10 @@ namespace Karakoç.Models
 {
     public partial class ResulContext : DbContext
     {
+        public ResulContext()
+        {
+        }
+
         public ResulContext(DbContextOptions<ResulContext> options)
             : base(options)
         {
@@ -18,6 +22,20 @@ namespace Karakoç.Models
         public virtual DbSet<Odemeler> Odemelers { get; set; } = null!;
         public virtual DbSet<Yevmiyeler> Yevmiyelers { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                var connectionString = config.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Calisan>(entity =>
@@ -27,6 +45,8 @@ namespace Karakoç.Models
                 entity.ToTable("Calisan");
 
                 entity.Property(e => e.CalısanId).HasColumnName("CalısanID");
+
+                entity.Property(e => e.Authority).HasColumnName("authority");
 
                 entity.Property(e => e.BirthDate).HasColumnType("date");
 

@@ -23,6 +23,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Uygulama için gerekli olduðunu belirt
 });
 
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,6 +52,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=KayýtOl}/{id?}");
+    pattern: "{controller=Admin}/{action=YevmiyeGor}/{id?}");
 
 app.Run();

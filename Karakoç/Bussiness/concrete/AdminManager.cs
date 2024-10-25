@@ -1,6 +1,7 @@
 ﻿using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 
 namespace Karakoç.Bussiness.concrete
@@ -14,28 +15,30 @@ namespace Karakoç.Bussiness.concrete
             _resulContext = resulContext;
         }
 
-        
 
-        public Calisan? GetCalisanById(int id)
+
+        public async Task<Calisan?> GetCalisanById(int id)
         {
-            
-                return _resulContext.Calisans
-                    .Include(c => c.Yevmiyelers)
-                    .Include(c => c.Odemelers)
-                    .FirstOrDefault(c => c.CalısanId == id);
-            
+            return await _resulContext.Calisans
+                      .Include(c => c.Yevmiyelers)
+                      .Include(c => c.Odemelers)
+                      .Include(c => c.Mesais)
+                      .FirstOrDefaultAsync(c => c.CalısanId == id);
         }
+
+
+
 
         public List<Calisan> GetCalisans()
         {
             return _resulContext.Calisans.ToList();
         }
 
-        public List<Mesai> GetMesai()
+        public async Task<List<Mesai>> GetMesai()
         {
-            var yevmiyeList = _resulContext.Mesais
+            var yevmiyeList = await _resulContext.Mesais
                            .Include(o => o.Calisan)
-                           .ToList();
+                           .ToListAsync();
             return yevmiyeList;
         }
 
@@ -49,14 +52,24 @@ namespace Karakoç.Bussiness.concrete
             return odemeListesi;
         }
 
-        public List<Yevmiyeler> GetYevmiyeler()
+        public  async Task<List<Yevmiyeler>> GetYevmiyeler()
         {
-            var yevmiyeList = _resulContext.Yevmiyelers
+            var yevmiyeList =  await _resulContext.Yevmiyelers
+                            .Include(o => o.Calisan)
+                            .ToListAsync();
+
+            return yevmiyeList;
+        }
+
+        public  List<Yevmiyeler> GetYevmiyelers()
+        {
+            var yevmiyeList =  _resulContext.Yevmiyelers
                             .Include(o => o.Calisan)
                             .ToList();
 
             return yevmiyeList;
         }
+
 
         public bool KaydetOdeme(int CalisanId, string Aciklama, int tutar)
         {
@@ -92,7 +105,7 @@ namespace Karakoç.Bussiness.concrete
                 {
                     var yeniMesai = new Mesai
                     {
-                        
+
                         CalisanId = calisan.CalısanId,
                         Tarih = Tarih,
                         IsWorked = isWorked.Contains(calisan.CalısanId)

@@ -40,12 +40,14 @@ namespace Karakoç.Bussiness.concrete
                 httpContext.Session.SetString("UserName", user.Name);
                 httpContext.Session.SetString("UserSurName", user.Surname);
                 httpContext.Session.SetString("UserEmail", user.Email);
+                httpContext.Session.SetInt32("Authority", Convert.ToInt32(user.Authority));
                 if (user.KayıtTarihi.HasValue) // Nullable kontrolü
                 {
                     httpContext.Session.SetString("KayitTarihi", user.KayıtTarihi.Value.ToString("yyyy-MM-dd"));
                 }
                 return true;
             }
+            
             else
             {
                 return false;
@@ -65,7 +67,9 @@ namespace Karakoç.Bussiness.concrete
                     Email = Remail,
                     KayıtTarihi = DateTime.Now,
                     BirthDate = BirthDay,
-                    Password = Rpassword
+                    Password = Rpassword,
+                    Authority = 1
+                    
                 };
                 // Yeni çalışanı veritabanına ekle ve değişiklikleri kaydet
                 _context.Calisans.Add(newCalisan);
