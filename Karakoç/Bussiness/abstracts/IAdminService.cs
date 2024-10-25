@@ -12,7 +12,7 @@ namespace Karakoç.Bussiness.abstracts
         public List<Yevmiyeler> GetYevmiyelers();
         public bool KaydetYevmiye(DateTime Tarih, List<int> isWorked);
 
-        public Calisan? GetCalisanById(int id);
+        
 
     }
 }

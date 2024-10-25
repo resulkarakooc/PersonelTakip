@@ -17,13 +17,13 @@ namespace Karakoç.Bussiness.concrete
 
 
 
-        public async Task<Calisan?> GetCalisanById(int id)
+        public Calisan? GetCalisanById(int id)
         {
-            return await _resulContext.Calisans
+            return _resulContext.Calisans
                       .Include(c => c.Yevmiyelers)
                       .Include(c => c.Odemelers)
                       .Include(c => c.Mesais)
-                      .FirstOrDefaultAsync(c => c.CalısanId == id);
+                      .FirstOrDefault(c => c.CalısanId == id);
         }
 
 
