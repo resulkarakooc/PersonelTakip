@@ -138,8 +138,23 @@ namespace Karakoç.Controllers
             return View(_adminManager.GetCalisans());
         }
 
+        [HttpPost("/Admin/calisanDelete/{id}")]
+        public IActionResult CalisanDelete(int id)
+        {
+            bool isDeleted = _adminManager.CalisanDelete(id);
 
-
+            if (isDeleted)
+            {
+                // Başarılı silme işlemi sonrası ana sayfaya veya çalışan listesine yönlendirin
+                return RedirectToAction("CalisanList", "Admin"); // Örneğin CalisanList sayfasına yönlendirebiliriz.
+            }
+            else
+            {
+                // Silme işlemi başarısız olduysa bir hata mesajı gösterin
+                ModelState.AddModelError("", "Çalışan silinemedi. Çalışan bulunamadı veya ilişkili veriler silinemedi.");
+                return View();
+            }
+        }
 
         public IActionResult YevmiyeGiris()
         {
@@ -208,17 +223,55 @@ namespace Karakoç.Controllers
             return View(_adminManager.GetCalisans());
         }
 
+        public class OdemeDto
+        {
+            public int OdemeId { get; set; }
+            public int CalisanId { get; set; }
+            public string Description { get; set; }
+            public decimal Amount { get; set; }
+            public string CalisanAd { get; set; } // Calisan ismi
+            public string CalisanSoyad { get; set; } // Calisan ismi
+            public DateTime Tarih { get; set; } // Tarih alanı
+        }
+
+        // Eğer ihtiyaç varsa
+        public class CalisanDto
+        {
+            public int Id { get; set; }
+            public string Ad { get; set; }
+            public string Soyad { get; set; }
+        }
+
+        [HttpGet("/Admin/Odeme")]
+        public async Task<IActionResult> GetOdeme()
+        {
+            var odemeler = await _adminManager.GetOdeme();
+
+            var odemeDtos = odemeler.Select(o => new OdemeDto
+            {
+                OdemeId = o.OdemeId,
+                CalisanId = o.CalisanId,
+                Description = o.Description,
+                Amount = o.Amount,
+                CalisanAd = o.Calisan.Name,
+                CalisanSoyad = o.Calisan.Surname,
+                Tarih = o.Tarih // Tarih alanını ekleyin
+            }).ToList();
+
+            return Json(odemeDtos); // DTO listesini JSON olarak döndür
+        }
+
         public IActionResult OdemeGor()
         {
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
 
-            //if (!Control())
-            //{
-            //    return RedirectToAction("Giris", "Login");
-            //}
 
-            var odemelist = _adminManager.GetOdeme().ToList();
-            return View(odemelist);
+            return View(); // View'a model olarak geçin
         }
+
 
 
         public class OdemelerViewModel
@@ -229,11 +282,30 @@ namespace Karakoç.Controllers
 
 
         [HttpPost]
-        public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar)
+        public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar, DateTime Tarih)
         {
-            _adminManager.KaydetOdeme(CalisanId, Aciklama, tutar);
+            _adminManager.KaydetOdeme(CalisanId, Aciklama, tutar, Tarih);
             ViewBag.Bilgi = "Kayıt Edildi";
             return RedirectToAction("OdemeGiris", "Admin");
+        }
+
+        public IActionResult Alınan()
+        {
+            
+            return View(_adminManager.GetGelir());
+        }
+
+        [HttpPost]
+        public IActionResult KaydetGelir(string aciklama,DateTime Tarih,decimal miktar)
+        {
+            _adminManager.KaydetGelir(aciklama, Tarih, miktar);
+            ViewBag.Info = "İşlem Kaydedildi";
+            return View("GelirGiris");
+        }
+
+        public IActionResult GelirGiris()
+        {
+            return View();
         }
 
         public bool Control()
@@ -244,7 +316,7 @@ namespace Karakoç.Controllers
             }
             else
             {
-                return false;
+                return true;
             }
 
         }

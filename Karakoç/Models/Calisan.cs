@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Karakoç.Models
 {
@@ -23,12 +22,11 @@ namespace Karakoç.Models
         public long? TcKimlik { get; set; }
         public DateTime? BirthDate { get; set; }
         public byte? Authority { get; set; }
+        public bool? Verify { get; set; }
 
         public virtual ICollection<Giderler> Giderlers { get; set; }
         public virtual ICollection<Mesai> Mesais { get; set; }
         public virtual ICollection<Odemeler> Odemelers { get; set; }
-
-        [JsonIgnore]
         public virtual ICollection<Yevmiyeler> Yevmiyelers { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace Karakoç.Models
         }
 
         public virtual DbSet<Calisan> Calisans { get; set; } = null!;
+        public virtual DbSet<GelirTablosu> GelirTablosus { get; set; } = null!;
         public virtual DbSet<Giderler> Giderlers { get; set; } = null!;
         public virtual DbSet<Mesai> Mesais { get; set; } = null!;
         public virtual DbSet<Odemeler> Odemelers { get; set; } = null!;
@@ -26,13 +27,8 @@ namespace Karakoç.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-
-                var connectionString = config.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=RESUL-THINKPAD\\SQLEXPRESS02;Database=Resul;Trusted_Connection=True;");
             }
         }
 
@@ -59,6 +55,19 @@ namespace Karakoç.Models
                 entity.Property(e => e.Password).HasMaxLength(64);
 
                 entity.Property(e => e.Surname).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<GelirTablosu>(entity =>
+            {
+                entity.HasKey(e => e.AlınanId);
+
+                entity.ToTable("GelirTablosu");
+
+                entity.Property(e => e.Aciklama).HasMaxLength(50);
+
+                entity.Property(e => e.AlınanMiktar).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.AlınanTarih).HasColumnType("date");
             });
 
             modelBuilder.Entity<Giderler>(entity =>

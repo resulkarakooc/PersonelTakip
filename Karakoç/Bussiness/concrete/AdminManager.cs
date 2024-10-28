@@ -1,4 +1,5 @@
-﻿using Karakoç.Bussiness.abstracts;
+﻿using Humanizer;
+using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,8 +16,34 @@ namespace Karakoç.Bussiness.concrete
             _resulContext = resulContext;
         }
 
+        public List<GelirTablosu> GetGelir()
+        {
+            return _resulContext.GelirTablosus.ToList();
+        }
+
+        public bool KaydetGelir(string aciklama, DateTime Tarih, decimal miktar)
+        {
+            try
+            {
+                GelirTablosu gelir = new GelirTablosu
+                {
+                    Aciklama = aciklama,
+                    AlınanMiktar = miktar,
+                    AlınanTarih = Tarih
+                };
+
+                _resulContext.GelirTablosus.Add(gelir);
+                _resulContext.SaveChanges();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
 
+        }
         public Calisan? GetCalisanById(int id)
         {
             return _resulContext.Calisans
@@ -41,29 +68,32 @@ namespace Karakoç.Bussiness.concrete
                            .ToListAsync();
             return yevmiyeList;
         }
-
-        public List<Odemeler> GetOdeme()
+        public async Task<List<Odemeler>> GetOdeme()
         {
-            var odemeListesi = _resulContext.Odemelers
-                            .Include(o => o.Calisan)
-                            .ToList();
+            // Veritabanından verileri al
+            var odemeListesi = await _resulContext.Odemelers.Include(o => o.Calisan).ToListAsync();
+
 
 
             return odemeListesi;
         }
 
-        public  async Task<List<Yevmiyeler>> GetYevmiyeler()
+
+
+
+
+        public async Task<List<Yevmiyeler>> GetYevmiyeler()
         {
-            var yevmiyeList =  await _resulContext.Yevmiyelers
+            var yevmiyeList = await _resulContext.Yevmiyelers
                             .Include(o => o.Calisan)
                             .ToListAsync();
 
             return yevmiyeList;
         }
 
-        public  List<Yevmiyeler> GetYevmiyelers()
+        public List<Yevmiyeler> GetYevmiyelers()
         {
-            var yevmiyeList =  _resulContext.Yevmiyelers
+            var yevmiyeList = _resulContext.Yevmiyelers
                             .Include(o => o.Calisan)
                             .ToList();
 
@@ -71,14 +101,14 @@ namespace Karakoç.Bussiness.concrete
         }
 
 
-        public bool KaydetOdeme(int CalisanId, string Aciklama, int tutar)
+        public bool KaydetOdeme(int CalisanId, string Aciklama, int tutar, DateTime tarih)
         {
             var odeme = new Odemeler
             {
                 CalisanId = CalisanId,
                 Amount = tutar,
                 Description = Aciklama,
-                Tarih = DateTime.Now
+                Tarih = tarih
             };
             _resulContext.Odemelers.Add(odeme);
             _resulContext.SaveChanges();
@@ -146,5 +176,53 @@ namespace Karakoç.Bussiness.concrete
             }
             return true;
         }
+
+
+
+        public bool CalisanDelete(int id)
+        {
+            // Çalışanı veritabanından al
+            var target = _resulContext.Calisans
+                            .Include(c => c.Odemelers) // Çalışanın ödemelerini dahil et
+                            .Include(c => c.Yevmiyelers)
+                            .Include(c => c.Mesais)// Örneğin kayıtlar tablosuyla ilişkiliyse
+                            .Include(c => c.Giderlers)
+                            // Örneğin kayıtlar tablosuyla ilişkiliyse
+                            .FirstOrDefault(x => x.CalısanId == id);
+
+            if (target == null) return false;
+
+            // İlişkili ödemeleri sil
+            if (target.Odemelers != null)
+            {
+                _resulContext.Odemelers.RemoveRange(target.Odemelers);
+            }
+
+            // İlişkili kayıtları sil
+            if (target.Giderlers != null)
+            {
+                _resulContext.Giderlers.RemoveRange(target.Giderlers);
+            }
+            
+            if (target.Mesais != null)
+            {
+                _resulContext.Mesais.RemoveRange(target.Mesais);
+            }
+            
+            if (target.Yevmiyelers != null)
+            {
+                _resulContext.Yevmiyelers.RemoveRange(target.Yevmiyelers);
+            }
+
+            // Çalışanı sil
+            _resulContext.Calisans.Remove(target);
+
+            // Değişiklikleri kaydet
+            _resulContext.SaveChanges();
+            return true;
+        }
+
+
+
     }
 }

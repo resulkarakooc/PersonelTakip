@@ -128,6 +128,7 @@
                     <tr>
                         <th>Tarih</th>
                         <th>Miktar</th>
+                        <th>Açıklama</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,8 +137,9 @@
                         <tr>
                             <td>@odeme.Tarih.ToShortDateString()</td>
                             <td>@odeme.Amount.ToString("C2")</td>
+                            <td>@odeme.Description</td>
                         </tr>
-                    }
+                    }   
                 </tbody>
             </table>
         </div>

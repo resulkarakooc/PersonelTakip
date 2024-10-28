@@ -17,6 +17,9 @@
                 <tr>
                     <th>Çalışan</th>
                     <th>Kayıt Tarihi</th>
+                    <th>Çıkış</th>
+                    <th>Verilerini Sil</th>
+                    <th>Yetki Ver</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +32,15 @@
                             </a>
                         </td>
                         <td>@calisan.KayıtTarihi?.ToString("dd.MM.yyyy")</td>
+                        <td> <a class="btn btn-warning">İş Çıkışını Yap</a></td>
+                        <td> <a href="~/Admin/calisanDelete/@calisan.CalısanId" class="btn btn-danger">Kullanıcıyı Sil</a></td>
+                        <td>
+                            <form>
+                            <input type="number" max="4" min="1" name="deger" value="@calisan.Authority" />
+                            <button class="btn btn-info" type="submit">Yetki</button>
+                            </form>
+                            
+                        </td>
 
                         
                     </tr>
