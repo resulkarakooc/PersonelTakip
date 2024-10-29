@@ -68,8 +68,9 @@ namespace Karakoç.Bussiness.concrete
                     KayıtTarihi = DateTime.Now,
                     BirthDate = BirthDay,
                     Password = Rpassword,
-                    Authority = 1
-                    
+                    Authority = 1,
+                    Verify = true
+
                 };
                 // Yeni çalışanı veritabanına ekle ve değişiklikleri kaydet
                 _context.Calisans.Add(newCalisan);

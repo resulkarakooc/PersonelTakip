@@ -76,7 +76,7 @@ namespace Karakoç.Controllers
 
 
 
-        // İlk yüklendiğinde mevcut ay ve yıl bilgileri ile verileri yükleyen aksiyon
+       
 
 
         public IActionResult Index()
@@ -86,7 +86,7 @@ namespace Karakoç.Controllers
                 return RedirectToAction("Giris", "Login");
             }
             // Tüm çalışanları al
-            var calisanlar = _adminManager.GetCalisans();
+            var calisanlar = _adminManager.GetCalisansVerify();
             var yevmiyeler = _adminManager.GetYevmiyelers();
 
             // Çalışan sayısını ViewBag ile gönder
@@ -138,7 +138,7 @@ namespace Karakoç.Controllers
             return View(_adminManager.GetCalisans());
         }
 
-        [HttpPost("/Admin/calisanDelete/{id}")]
+        [Route("/Admin/calisanDelete/{id}")]
         public IActionResult CalisanDelete(int id)
         {
             bool isDeleted = _adminManager.CalisanDelete(id);
@@ -146,7 +146,7 @@ namespace Karakoç.Controllers
             if (isDeleted)
             {
                 // Başarılı silme işlemi sonrası ana sayfaya veya çalışan listesine yönlendirin
-                return RedirectToAction("CalisanList", "Admin"); // Örneğin CalisanList sayfasına yönlendirebiliriz.
+                return RedirectToAction("CalisanList", "Admin"); 
             }
             else
             {
@@ -156,6 +156,21 @@ namespace Karakoç.Controllers
             }
         }
 
+        [Route("/Admin/UpdateAuthority/{id}/{deger}")]
+        public IActionResult UpdateAuthority(int id, byte deger)
+        {
+            
+            _adminManager.UpdateAuthority(id, deger);
+            return RedirectToAction("CalisanList", "Admin");
+        }
+
+        [Route("/Admin/UpdateVerify/{id}")]
+        public IActionResult UpdateVerify(int id)
+        {
+            _adminManager.UpdateVerify(id);
+            return RedirectToAction("CalisanList", "Admin");
+        }
+
         public IActionResult YevmiyeGiris()
         {
             if (!Control())
@@ -163,7 +178,7 @@ namespace Karakoç.Controllers
                 return RedirectToAction("Giris", "Login");
             }
 
-            var calisanList = _adminManager.GetCalisans();
+            var calisanList = _adminManager.GetCalisansVerify();
             return View(calisanList);
         }
 
@@ -174,7 +189,7 @@ namespace Karakoç.Controllers
                 return RedirectToAction("Giris", "Login");
             }
 
-            var calisanList = _adminManager.GetCalisans();
+            var calisanList = _adminManager.GetCalisansVerify();
             return View(calisanList);
         }
 
@@ -272,13 +287,6 @@ namespace Karakoç.Controllers
             return View(); // View'a model olarak geçin
         }
 
-
-
-        public class OdemelerViewModel
-        {
-            public List<Odemeler> Odemeler { get; set; }
-            public decimal ToplamTutar { get; set; }
-        }
 
 
         [HttpPost]

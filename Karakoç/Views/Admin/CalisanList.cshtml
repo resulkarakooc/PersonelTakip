@@ -2,15 +2,11 @@
 @{
     ViewData["Title"] = "CalisanList";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-
-    
 }
-
 
 <main class="main users chart-page" id="skip-target">
     <div class="container">
         <h2 class="main-title">Çalışanların Listesi</h2>
-
 
         <table class="table table-bordered table-primary">
             <thead>
@@ -32,21 +28,55 @@
                             </a>
                         </td>
                         <td>@calisan.KayıtTarihi?.ToString("dd.MM.yyyy")</td>
-                        <td> <a class="btn btn-warning">İş Çıkışını Yap</a></td>
-                        <td> <a href="~/Admin/calisanDelete/@calisan.CalısanId" class="btn btn-danger">Kullanıcıyı Sil</a></td>
                         <td>
-                            <form>
-                            <input type="number" max="4" min="1" name="deger" value="@calisan.Authority" />
-                            <button class="btn btn-info" type="submit">Yetki</button>
-                            </form>
-                            
+                            @if(calisan.Verify != null)
+                            {
+                                if ((bool)calisan.Verify)
+                                {
+                                    <a href="/Admin/UpdateVerify/@calisan.CalısanId" class="btn btn-warning">İş Çıkışını Yap</a>
+                                }
+                                else
+                                {
+                                    <a href="/Admin/UpdateVerify/@calisan.CalısanId" class="btn btn-success">İş Girişini Yap</a>
+                                }
+                            }
+                            else
+                            {
+                                 <a href="##" class="btn btn-Danger">!! Hata !!</a>
+                            }
+
+                           
+
                         </td>
 
-                        
+                        <td>
+                            <a href="javascript:void(0);" onclick="confirmDelete('@Url.Action("calisanDelete", "Admin", new { id = calisan.CalısanId })')" class="btn btn-danger">Kullanıcıyı Sil</a>
+                        </td>
+
+                        <td>
+                            <input type="number" max="4" min="1" name="deger" id="deger_@calisan.CalısanId" value="@calisan.Authority" />
+                            <a href="#" class="btn btn-info" onclick="updateAuthority(@calisan.CalısanId)">Yetki</a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
-
     </div>
 </main>
+
+<script>
+    function confirmDelete(url) {
+        const confirmed = confirm("UYARI !!!  Emin misiniz? Tüm Veriler Silinecek ve Bir Daha Erilşilemeyecek Yine de Silmek İstiyorsanız Tamam butonuna Tıklayın. ");
+        if (confirmed) {
+            window.location.href = url;
+        }
+    }
+
+    function updateAuthority(calisanId) {
+        // 'deger' input'unun değerini al
+        const deger = document.getElementById(`deger_${calisanId}`).value;
+        // URL ile yönlendir
+        window.location.href = `/Admin/UpdateAuthority/${calisanId}/${deger}`;
+    }
+
+</script>

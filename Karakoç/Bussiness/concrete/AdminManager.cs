@@ -3,7 +3,7 @@ using Karakoç.Bussiness.abstracts;
 using Karakoç.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-
+using System.Security;
 
 namespace Karakoç.Bussiness.concrete
 {
@@ -60,6 +60,13 @@ namespace Karakoç.Bussiness.concrete
         {
             return _resulContext.Calisans.ToList();
         }
+
+        public List<Calisan> GetCalisansVerify()
+        {
+            return _resulContext.Calisans.Where(x => x.Verify == true).ToList();
+        }
+
+
 
         public async Task<List<Mesai>> GetMesai()
         {
@@ -222,6 +229,41 @@ namespace Karakoç.Bussiness.concrete
             return true;
         }
 
+
+        public bool UpdateAuthority(int id, byte deger)
+        {
+            var personel = _resulContext.Calisans.FirstOrDefault(x => x.CalısanId == id);
+
+            if (personel == null) return false;
+
+            personel.Authority = deger;
+
+            _resulContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool UpdateVerify(int id)
+        {
+           var personel =  _resulContext.Calisans.FirstOrDefault(x => x.CalısanId == id);
+
+            if (personel == null) return false;
+
+            if(personel.Verify != null)
+            {
+                if ((bool)personel.Verify)
+                {
+                    personel.Verify = false;
+                }
+                else
+                {
+                    personel.Verify = true;
+                }
+                _resulContext.SaveChanges();
+            }
+
+            return true;
+        }
 
 
     }
