@@ -130,11 +130,11 @@ namespace Karakoç.Controllers
 
         public IActionResult CalisanList()
         {
-            if (!Control())
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
             {
                 return RedirectToAction("Giris", "Login");
             }
-
+           
             return View(_adminManager.GetCalisans());
         }
 
@@ -173,7 +173,7 @@ namespace Karakoç.Controllers
 
         public IActionResult YevmiyeGiris()
         {
-            if (!Control())
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -184,7 +184,8 @@ namespace Karakoç.Controllers
 
         public IActionResult MesaiGiris()
         {
-            if (!Control())
+
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -230,7 +231,7 @@ namespace Karakoç.Controllers
 
         public IActionResult OdemeGiris()
         {
-            if (!Control())
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -278,7 +279,7 @@ namespace Karakoç.Controllers
 
         public IActionResult OdemeGor()
         {
-            if (!Control())
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -299,7 +300,10 @@ namespace Karakoç.Controllers
 
         public IActionResult Alınan()
         {
-            
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
             return View(_adminManager.GetGelir());
         }
 
@@ -313,18 +317,22 @@ namespace Karakoç.Controllers
 
         public IActionResult GelirGiris()
         {
+            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            {
+                return RedirectToAction("Giris", "Login");
+            }
             return View();
         }
 
         public bool Control()
         {
-            if (HttpContext.Session.GetInt32("Authority") == 3) //admin ise
+            if (HttpContext.Session.GetInt32("Authority") == 3 || HttpContext.Session.GetInt32("Authority") == 4) //admin ise
             {
                 return true;
             }
             else
             {
-                return true;
+                return false;
             }
 
         }
