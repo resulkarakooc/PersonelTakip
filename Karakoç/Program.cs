@@ -10,6 +10,8 @@ builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<CalisanManager>();
 builder.Services.AddScoped<OrganizerManager>();
 builder.Services.AddScoped<AdminManager>();
+builder.Services.AddScoped<SefManager>();
+
 
 
 builder.Services.AddDbContext<ResulContext>(options =>
@@ -52,6 +54,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Admin}/{action=OdemeGor}/{id?}");
+    pattern: "{controller=Calisan}/{action=Home}/{id?}");
 
 app.Run();

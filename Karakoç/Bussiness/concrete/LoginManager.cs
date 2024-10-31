@@ -45,6 +45,27 @@ namespace Karakoç.Bussiness.concrete
                 {
                     httpContext.Session.SetString("KayitTarihi", user.KayıtTarihi.Value.ToString("yyyy-MM-dd"));
                 }
+
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTime.Now.AddDays(4), // Çerez 4 gün boyunca geçerli
+                    HttpOnly = true, // Çereze tarayıcıdan erişimi sınırla (güvenlik için)
+                    IsEssential = true // Çerezin her zaman oluşturulmasını zorunlu kıl
+                };
+
+                // Çerezlerde kullanıcı bilgilerini sakla
+                httpContext.Response.Cookies.Append("CalisanId", user.CalısanId.ToString(), cookieOptions);
+                httpContext.Response.Cookies.Append("UserName", user.Name, cookieOptions);
+                httpContext.Response.Cookies.Append("UserSurName", user.Surname, cookieOptions);
+                httpContext.Response.Cookies.Append("UserEmail", user.Email, cookieOptions);
+                httpContext.Response.Cookies.Append("Authority", user.Authority.ToString(), cookieOptions);
+                httpContext.Response.Cookies.Append("isLogged", "true", cookieOptions);
+
+                if (user.KayıtTarihi.HasValue)
+                {
+                    httpContext.Response.Cookies.Append("KayitTarihi", user.KayıtTarihi.Value.ToString("yyyy-MM-dd"), cookieOptions);
+                }
+
                 return true;
             }
             
@@ -52,6 +73,9 @@ namespace Karakoç.Bussiness.concrete
             {
                 return false;
             }
+
+            
+
         }
 
         public bool Register(long TC, string Rusername, string Rlastname, string Remail, DateTime BirthDay, string Rpassword)

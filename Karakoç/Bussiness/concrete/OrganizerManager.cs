@@ -13,7 +13,7 @@ namespace Karakoç.Bussiness.concrete
         }
         public List<Calisan> GetCalisans()
         {
-            var calisanlar = _context.Calisans.ToList();
+            var calisanlar = _context.Calisans.Where(x => x.Verify == true).ToList();
             return calisanlar;
         }
 

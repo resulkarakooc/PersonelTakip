@@ -2,6 +2,7 @@
 using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
 using MernisServiceReference;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
@@ -130,7 +131,7 @@ namespace Karakoç.Controllers
 
         public IActionResult CalisanList()
         {
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -173,7 +174,7 @@ namespace Karakoç.Controllers
 
         public IActionResult YevmiyeGiris()
         {
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -185,7 +186,7 @@ namespace Karakoç.Controllers
         public IActionResult MesaiGiris()
         {
 
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -231,12 +232,12 @@ namespace Karakoç.Controllers
 
         public IActionResult OdemeGiris()
         {
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
 
-            return View(_adminManager.GetCalisans());
+            return View(_adminManager.GetCalisansVerify());
         }
 
         public class OdemeDto
@@ -279,7 +280,7 @@ namespace Karakoç.Controllers
 
         public IActionResult OdemeGor()
         {
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -317,7 +318,7 @@ namespace Karakoç.Controllers
 
         public IActionResult GelirGiris()
         {
-            if (!Control() || HttpContext.Session.GetInt32("Authority") == 4)
+            if (!Control())
             {
                 return RedirectToAction("Giris", "Login");
             }
@@ -326,7 +327,7 @@ namespace Karakoç.Controllers
 
         public bool Control()
         {
-            if (HttpContext.Session.GetInt32("Authority") == 3 || HttpContext.Session.GetInt32("Authority") == 4) //admin ise
+            if (HttpContext.Request.Cookies["Authority"] == "3") //admin ise al
             {
                 return true;
             }
@@ -334,6 +335,7 @@ namespace Karakoç.Controllers
             {
                 return false;
             }
+
 
         }
     }

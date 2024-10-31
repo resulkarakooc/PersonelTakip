@@ -1,6 +1,7 @@
 ﻿using Karakoç.Bussiness.concrete;
 using Karakoç.MailService;
 using MernisServiceReference;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
@@ -87,6 +88,10 @@ public class LoginController : Controller
             {
                 return RedirectToAction("Index", "Admin");
             }
+            else if(HttpContext.Session.GetInt32("Authority") == 4)
+            {
+                return RedirectToAction("Index", "Sef");
+            }
             else
             {
                 ViewBag.ErrorMessage = "Email veya Parola Yanlış";
@@ -146,6 +151,14 @@ public class LoginController : Controller
 
     public IActionResult LogOut()
     {
+        HttpContext.Response.Cookies.Delete("CalisanId");
+        HttpContext.Response.Cookies.Delete("UserName");
+        HttpContext.Response.Cookies.Delete("UserSurName");
+        HttpContext.Response.Cookies.Delete("UserEmail");
+        HttpContext.Response.Cookies.Delete("Authority");
+        HttpContext.Response.Cookies.Delete("KayitTarihi");
+        HttpContext.Response.Cookies.Delete("isLogged");
+
         HttpContext.Session.Clear();
         return RedirectToAction("Giris", "Login");
     }

@@ -1,8 +1,7 @@
-﻿@model List<Mesai>
+﻿
 @{
     ViewData["Title"] = "MesaiGor";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    var günSayısı = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); // O ayın gün sayısı
+    Layout = "~/Views/Shared/_MimarLayout.cshtml";
 }
 
 <!-- jQuery dahil et -->
@@ -50,7 +49,7 @@
 
         // Verileri al
         $.ajax({
-            url: '@Url.Action("GetMesai", "Admin")', // Controller ve action'ı ayarlayın
+            url: '@Url.Action("GetMesai", "Sef")', // Controller ve action'ı ayarlayın
             type: 'GET',
             success: function (data) {
                 allData = data.$values || [];
@@ -75,15 +74,15 @@
         function createTable(year, month) {
             const günSayısı = new Date(year, month, 0).getDate(); // Seçilen ayın gün sayısını al
             let tableHtml = `<table class="table table-bordered table-primary">
-                                        <thead>
-                                            <tr>
-                                                <th>Çalışan</th>`;
+                                            <thead>
+                                                <tr>
+                                                    <th>Çalışan</th>`;
             for (let i = 1; i <= günSayısı; i++) {
                 tableHtml += `<th>${i}</th>`; // Gün başlıkları
             }
             tableHtml += `   </tr>
-                                    </thead>
-                                    <tbody>`;
+                                        </thead>
+                                        <tbody>`;
 
             // Çalışan grupları oluştur
             const groupedData = groupDataByEmployee(allData, year, month);
@@ -116,3 +115,4 @@
         }
     });
 </script>
+

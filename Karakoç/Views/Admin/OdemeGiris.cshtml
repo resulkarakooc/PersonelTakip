@@ -29,7 +29,7 @@
         <form action="/Admin/KaydetOdeme" method="post" class="karakoç">
             <div class="mb-3">
                 <label for="CalisanId" class="form-label">Çalışan:</label>
-                <select name="CalisanId" id="CalisanId" class="form-select">
+                <select name="CalisanId" id="CalisanId" class="form-select" required>
                     <option value="">Çalışan Seçin</option>
                     @foreach (var calisan in Model)
                     {
@@ -40,18 +40,18 @@
 
             <div class="mb-3">
                 <label for="Aciklama" class="form-label">Açıklama:</label>
-                <input type="text" name="Aciklama" id="Aciklama" class="form-control" placeholder="Gider açıklaması" />
+                <input type="text" name="Aciklama" id="Aciklama" class="form-control" placeholder="Ödeme açıklaması" required />
             </div>
 
             <div class="mb-3">
                 <label for="Tutar" class="form-label">Tutar:</label>
-                <input type="number" name="Tutar" id="Tutar" step="0.01" class="form-control" placeholder="Gider tutarı" />
+                <input type="number" name="Tutar" id="Tutar" step="0.01" class="form-control" placeholder="Ödeme tutarı" required />
             </div>
 
             <!-- Tarih Seçici -->
             <div class="mb-3">
                 <label for="Tarih" class="form-label">Tarih:</label>
-                <input type="date" name="Tarih" id="Tarih" class="form-control" />
+                <input type="date" name="Tarih" id="Tarih" class="form-control" required/>
             </div>
 
             <button type="submit" class="btn btn-primary">Kaydet</button> <br />

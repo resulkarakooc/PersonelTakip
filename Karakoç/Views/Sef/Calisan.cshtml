@@ -1,14 +1,14 @@
 ﻿@model Calisan
 @{
-    ViewData["Title"] = "Çalışan Bilgileri";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-
+    ViewData["Title"] = "Calisan";
+    Layout = "~/Views/Shared/_MimarLayout.cshtml";
     // Mevcut ay ve yıl bilgisi
     int currentYear = DateTime.Now.Year;
     int currentMonth = DateTime.Now.Month;
 
     // Gün sayısını al
     int dayCount = DateTime.DaysInMonth(currentYear, currentMonth);
+
 }
 
 
@@ -36,8 +36,26 @@
                         <td>@Model.Surname</td>
                     </tr>
                     <tr>
-                        <td>İd</td>
-                        <td>@Model.CalısanId</td>
+                        <td>TC Kimlik No</td>
+                        <td>@Model.TcKimlik</td>
+                    </tr>
+                    <tr>
+                        <td>Çalışıyor mu?</td>
+                        @if (Model.Verify != null)
+                        {
+                            if(Model.Verify == true)
+                            {
+                                <td>Aktif Çalışan</td>
+                            }
+                            else
+                            {
+                                <td>Pasif Çalışan</td>
+                            }
+                        }
+                        else
+                        {
+                            <td>Bilgi Yok</td>
+                        }
                     </tr>
                     <tr>
                         <td>Email</td>
@@ -47,6 +65,7 @@
                         <td>Kayıt Tarihi</td>
                         <td>@Model.KayıtTarihi?.ToString("dd.MM.yyyy")</td>
                     </tr>
+                    
                 </tbody>
             </table>
         </div>
@@ -119,29 +138,5 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Ödemeler -->
-        <h2 class="main-title">Ödeme Bilgileri</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Tarih</th>
-                        <th>Miktar</th>
-                        <th>Açıklama</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var odeme in Model.Odemelers)
-                    {
-                        <tr>
-                            <td>@odeme.Tarih.ToShortDateString()</td>
-                            <td>@odeme.Amount.ToString("C2")</td>
-                            <td>@odeme.Description</td>
-                        </tr>
-                    }   
-                </tbody>
-            </table>
-        </div>
-    </div>
+ 
 </main>

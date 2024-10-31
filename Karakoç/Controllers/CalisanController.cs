@@ -3,6 +3,7 @@ using Karakoç.Models; // Modelin bulunduğu namespace
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; // EF Core için gerekli
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 
 namespace Karakoç.Controllers
@@ -20,16 +21,13 @@ namespace Karakoç.Controllers
         [HttpGet]
         public IActionResult AnaSayfa()
         {
-            var userName = HttpContext.Session.GetString("UserName");
-            var userSurName = HttpContext.Session.GetString("UserSurName");
-            var userEmail = HttpContext.Session.GetString("UserEmail");
-            var KayitTarihi = HttpContext.Session.GetString("KayitTarihi");
-            
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
 
-            ViewBag.UserName = userName;
-            ViewBag.UserSurName = userSurName;
-            ViewBag.UserEmail = userEmail;
-            ViewBag.KayitTarihi = KayitTarihi;
+           
+
 
 
             return View(manager.GetYevmiye(HttpContext)); // burası bir liste döndürücek geriye
@@ -37,11 +35,18 @@ namespace Karakoç.Controllers
 
         public IActionResult Home()
         {
-            var CalisanId = HttpContext.Session.GetInt32("CalisanId");
-            var userName = HttpContext.Session.GetString("UserName");
-            var userSurName = HttpContext.Session.GetString("UserSurName");
-            var userEmail = HttpContext.Session.GetString("UserEmail");
-            var KayitTarihi = HttpContext.Session.GetString("KayitTarihi");
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
+            var CalisanId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
+            var userName = HttpContext.Request.Cookies["UserName"];
+            var userSurName = HttpContext.Request.Cookies["UserSurName"];
+            var userEmail = HttpContext.Request.Cookies["UserEmail"];
+            var KayitTarihi = HttpContext.Request.Cookies["KayitTarihi"];
+
+            
 
             ViewBag.UserName = userName;
             ViewBag.UserSurName = userSurName;
@@ -49,17 +54,30 @@ namespace Karakoç.Controllers
             ViewBag.KayitTarihi = KayitTarihi;
 
             var yevmiyeListesi = _resulContext.Yevmiyelers.Where(y => y.CalisanId == CalisanId).ToList();
-
+            var mesaiListesi = _resulContext.Mesais.Where(y => y.CalisanId == CalisanId).ToList();
+            var avansListesi = _resulContext.Odemelers.Where(y => y.CalisanId == CalisanId && y.Tarih.Month == DateTime.Now.Month).ToList();
             // Çalışılan günleri sayma
-            int calismaGunSayisi = yevmiyeListesi.Count(y => y.IsWorked == true);
+            double calismaGunSayisi = yevmiyeListesi.Count(y => y.IsWorked == true && y.Tarih.Value.Month == DateTime.Now.Month);
+            double mesaiGunSayisi = mesaiListesi.Count(y => y.IsWorked == true && y.Tarih.Month == DateTime.Now.Month);
+            double miktar = avansListesi.Sum(y => y.Amount);
             ViewBag.WorkedDays = calismaGunSayisi;
+            mesaiGunSayisi = mesaiGunSayisi / 2;
+            ViewBag.WorkedDaysMesai = mesaiGunSayisi;
+            ViewBag.Total = calismaGunSayisi+ mesaiGunSayisi;
+            ViewBag.Miktar = miktar;
             ViewBag.UserName = userName+" "+userSurName;
+
             return View();
         }
 
         public IActionResult Puantajım()
         {
-            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
+            var kullaniciId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
             
 
             // Veritabanından bu kullanıcıya ait yevmiye kayıtlarını çek
@@ -75,7 +93,12 @@ namespace Karakoç.Controllers
         [HttpGet]
         public IActionResult Mesailerim()
         {
-            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+            if (!Control())
+            {
+                return RedirectToAction("Giris", "Login");
+            }
+
+            var kullaniciId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
 
 
             // Veritabanından bu kullanıcıya ait yevmiye kayıtlarını çek
@@ -89,13 +112,30 @@ namespace Karakoç.Controllers
 
         public IActionResult Odemeler() 
         {
-            var kullaniciId = HttpContext.Session.GetInt32("CalisanId");
+            if (!Control())
+            {
+                 return RedirectToAction("Giris", "Login");
+            }
+
+            var kullaniciId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
             var liste = _resulContext.Odemelers.Where(y => y.CalisanId == kullaniciId).ToList(); 
             
 
             return View(liste); 
         }
 
+        public bool Control()
+        {
+            if (HttpContext.Request.Cookies["Authority"] == "1" && HttpContext.Request.Cookies["isLogged"] == "true") //calisan ise
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+
+        }
     }
 }

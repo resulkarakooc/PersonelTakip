@@ -30,8 +30,8 @@
                         <span class="sr-only">Home</span>
                         <span class="icon logo" aria-hidden="true"></span>
                         <div class="logo-text">
-                            <span class="logo-title">Karakoç İnşaat</span>
-                            <span class="logo-subtitle">Şantiye Şefi Paneli</span>
+                            <span class="logo-title">Karakoç İnş.</span>
+                            <span class="logo-subtitle">Şantiye Şefi</span>
                         </div>
 
                     </a>
@@ -56,7 +56,7 @@
                             <ul class="cat-sub-menu">
                                 
                                 <li>
-                                    <a href="~/Admin/Alınan">Ödemeler</a>
+                                    <a href="~/Sef/Ödemeler">Ödemeler</a>
                                 </li>
                             </ul>
                         </li>
@@ -70,12 +70,12 @@
                             </a>
                             <ul class="cat-sub-menu">
                                 <li>
-                                    <a href="~/Admin/YevmiyeGor">Yevmiyeler</a>
+                                    <a href="~/Sef/YevmiyeGor">Yevmiyeler</a>
                                 </li>
                                 
                                
                                 <li>
-                                    <a href="~/Admin/MesaiGor">Mesailer</a>
+                                    <a href="~/Sef/MesaiGor">Mesailer</a>
                                 </li>
                             </ul>
                         </li>
@@ -90,7 +90,7 @@
                             </a>
                             <ul class="cat-sub-menu">
                                 <li>
-                                    <a href="~/Admin/CalisanList">Çalışan Listesi</a>
+                                    <a href="~/Sef/CalisanList">Çalışan Listesi</a>
                                 </li>
 
                             </ul>
@@ -220,7 +220,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="danger" href="##">
+                                    <a class="danger" href="javascript:void(0);" onclick="logOut()">
+                                       
                                         <i data-feather="log-out" aria-hidden="true"></i>
                                         <span>Çıkış</span>
                                     </a>
@@ -238,7 +239,7 @@
                 <div class="container footer--flex">
                     <div class="footer-start">
                         <p>
-                            2024 © Karakoç Dashboard - <a href="Karakoç-dashboard.com" target="_blank"
+                            2024 © Karakoç Dashboard - <a href="https://media.licdn.com/dms/image/v2/D4D03AQGuwT6TU9SG2Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1722583079498?e=2147483647&v=beta&t=CqZM4qx7Jn7DYKMzTrkap5ZOGk3AD_qLqVWGqnbi0AE" target="_blank"
                                                           rel="noopener noreferrer">Karakoç-dashboard.com</a>
                         </p>
                     </div>
@@ -253,6 +254,11 @@
         </div>
     </div>
 
+    <script>
+        function logOut() {
+            window.location.href = '@Url.Action("LogOut", "Login")';
+        }
+    </script>
 
 
 
