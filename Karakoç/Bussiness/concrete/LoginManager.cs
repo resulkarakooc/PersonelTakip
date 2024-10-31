@@ -29,10 +29,10 @@ namespace Karakoç.Bussiness.concrete
 
         public bool Login(string username, string password, HttpContext httpContext)
         {
-
+            var hashpass = Cryptography.ShaConverter.ComputeSha256Hash(password);
 
             var user = _context.Calisans
-                .FirstOrDefault(c => c.Email == username && c.Password == password);
+                .FirstOrDefault(c => c.Email == username && c.Password == hashpass);
 
             if (user != null)
             {
@@ -83,15 +83,17 @@ namespace Karakoç.Bussiness.concrete
             var user = _context.Calisans.FirstOrDefault(c => c.Email == Remail);
             if (user == null) //mevcut kayıt yok ise 
             {
+                string hashpass =  Cryptography.ShaConverter.ComputeSha256Hash(Rpassword);
                 var newCalisan = new Calisan
                 {
+                    
                     TcKimlik = TC,
                     Name = Rusername,
                     Surname = Rlastname,
                     Email = Remail,
                     KayıtTarihi = DateTime.Now,
                     BirthDate = BirthDay,
-                    Password = Rpassword,
+                    Password = hashpass,
                     Authority = 1,
                     Verify = true
 
