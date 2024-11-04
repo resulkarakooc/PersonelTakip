@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -12,15 +11,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karakoç İnşaat | Giriş</title>
     <!-- Favicon -->
-    <link rel="icon" href="https://www.flaticon.com/free-icons/worker" type="image/png" title="Worker icons created by Freepik - Flaticon">
+    <link rel="icon" type="image/png" href="/img/Karakoç.png" sizes="32x32">
+
     <!-- Custom styles -->
     <link rel="stylesheet" href="/css/style.min.css">
 </head>
 
 <body>
+
+    <style>
+        .responsive-img {
+            max-width: 100px; /* Görselin genişliği maksimum 100px olacak */
+            height: auto; /* Yüksekliği genişliğe göre orantılı şekilde ayarlanacak */
+            display: block; /* Görseli ortalamak için kullanılabilir */
+            margin: 0 auto; /* Görseli yatayda ortalar */
+        }
+    </style>
+
+
+
     <div class="layer"></div>
     <main class="page-center">
         <article class="sign-up">
+
+            <img style="" src="~/img/Karakoç.png" class="responsive-img">  @* görsel *@
+
             <h1 class="sign-up__title">Karakoç İnşaat</h1>
             <p class="sign-up__subtitle">Giriş için Bilgilerinizi Giriniz</p>
             @if (ViewBag.ErrorMessage != null)
@@ -41,7 +56,7 @@
                 </label>
                 <a class="link-info forget-link" href="#">Şifremi Unuttum?</a> <br />
                 <a class="link-info forget-link" href="~/Login/KayıtOl">KAYIT OL</a>
-                
+
                 <button type="submit" class="form-btn primary-default-btn transparent-btn">Sign in</button>
             </form>
         </article>

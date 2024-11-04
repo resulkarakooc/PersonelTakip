@@ -1,4 +1,5 @@
-﻿using Karakoç.Bussiness.concrete;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Karakoç.Bussiness.concrete;
 using Karakoç.Models; // Modelin bulunduğu namespace
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,6 @@ namespace Karakoç.Controllers
             {
                 return RedirectToAction("Giris", "Login");
             }
-
-           
-
-
 
             return View(manager.GetYevmiye(HttpContext)); // burası bir liste döndürücek geriye
         }
@@ -88,6 +85,15 @@ namespace Karakoç.Controllers
             return View(yevmiyeKayitlari);
         }
 
+        [HttpGet("/Calisan/GetMyPuantaj")]
+        public IActionResult GetMyPuantaj()
+        {
+            var CalisanId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
+            
+            var list = _resulContext.Yevmiyelers.Where(x => x.CalisanId == CalisanId).ToList();
+
+            return  Json(list);
+        }
 
 
         [HttpGet]
@@ -109,6 +115,17 @@ namespace Karakoç.Controllers
             return View(yevmiyeKayitlari);
             
         }
+
+        [HttpGet("/Calisan/GetMyMesai")]
+        public IActionResult GetMyMesai()
+        {
+            var CalisanId = Convert.ToInt32(HttpContext.Request.Cookies["CalisanId"]);
+
+            var list = _resulContext.Mesais.Where(x => x.CalisanId == CalisanId).ToList();
+
+            return Json(list);
+        }
+
 
         public IActionResult Odemeler() 
         {

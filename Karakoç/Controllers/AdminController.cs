@@ -1,4 +1,5 @@
-﻿using Karakoç.Bussiness.abstracts;
+﻿using DocumentFormat.OpenXml.InkML;
+using Karakoç.Bussiness.abstracts;
 using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
 using MernisServiceReference;
@@ -12,10 +13,12 @@ namespace Karakoç.Controllers
     public class AdminController : Controller
     {
         private AdminManager _adminManager;
+        private ResulContext _context;
 
-        public AdminController(AdminManager adminManager)
+        public AdminController(AdminManager adminManager,ResulContext context)
         {
             _adminManager = adminManager;
+            _context = context;
         }
 
         public async Task<IActionResult> GetYevmiye()
@@ -44,7 +47,6 @@ namespace Karakoç.Controllers
             return View();
         }
 
-
         public IActionResult MesaiGor()
         {
 
@@ -55,7 +57,6 @@ namespace Karakoç.Controllers
 
             return View();
         }
-
         public async Task<IActionResult> GetMesai()
         {
             var yevmiyeler = await _adminManager.GetMesai();
@@ -74,11 +75,6 @@ namespace Karakoç.Controllers
             // Normal olarak view döndür
             return Json(veriler);
         }
-
-
-
-       
-
 
         public IActionResult Index()
         {
@@ -108,8 +104,6 @@ namespace Karakoç.Controllers
 
             return View(); // Çalışanları da model olarak gönder
         }
-
-       
 
         [Route("/Admin/Calisan/{id}")]
         public IActionResult Calisan(int id)
@@ -195,8 +189,6 @@ namespace Karakoç.Controllers
             return View(calisanList);
         }
 
-
-
         [HttpPost]
         public IActionResult MesaiKaydet(DateTime Tarih, List<int> isWorked)
         {
@@ -227,8 +219,6 @@ namespace Karakoç.Controllers
                 return RedirectToAction("YevmiyeGiris", "Admin");
             }
         }
-
-
 
         public IActionResult OdemeGiris()
         {
@@ -289,8 +279,6 @@ namespace Karakoç.Controllers
             return View(); // View'a model olarak geçin
         }
 
-
-
         [HttpPost]
         public IActionResult KaydetOdeme(int CalisanId, string Aciklama, int tutar, DateTime Tarih)
         {
@@ -325,6 +313,14 @@ namespace Karakoç.Controllers
             return View();
         }
 
+        //public IActionResult Export()     // deneme sürümünde etkinleştirilecektir
+        //{
+        //    string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "ExportExcel", "Template.xlsx");
+
+        //    // Excel dosyasını oluşturmak için ExportExcel sınıfını kullan
+        //    return ExportExcel.ExportExcel.GenerateExcelWithWorkdays(_context, templatePath);
+        //}
+
         public bool Control()
         {
             if (HttpContext.Request.Cookies["Authority"] == "3") //admin ise al
@@ -335,8 +331,6 @@ namespace Karakoç.Controllers
             {
                 return false;
             }
-
-
         }
     }
 }
