@@ -1,45 +1,5 @@
-﻿@model List<Karakoç.Models.Calisan>
+﻿
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Çalışan Listesi</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2>Çalışanların Çalışma Durumu</h2>
-        <form method="post" action="/Organizer/Kaydet">
-            <div class="form-group">
-                <label for="tarih">Tarih Seçin:</label>
-                <input type="date" id="tarih" name="Tarih" class="form-control" required />
-            </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Çalışan isim ve soyisim</th>
-                        <th>Çalıştı mı?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var calisan in Model)
-                    {
-                        <tr>
-                            <td>@calisan.Name @calisan.Surname</td>
-                            <td>
-                                <input type="checkbox" name="isWorked" value="@calisan.CalısanId" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary">Kaydet</button>
-        </form>
-    </div>
-</body>
-</html>

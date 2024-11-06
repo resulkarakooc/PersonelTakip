@@ -1,18 +1,13 @@
 ﻿@model Karakoç.Controllers.OrganizerController.GiderViewModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>GetGider</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body>
+<main>
+
     <h2>Giderler</h2>
 
     <table class="table table-bordered">
@@ -65,6 +60,4 @@
         }
     </script>
 
-</body>
-
-</html>
+</main>

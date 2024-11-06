@@ -143,7 +143,7 @@ namespace Karakoç.Controllers
 
         public bool Control()
         {
-            if (HttpContext.Request.Cookies["Authority"] == "1" && HttpContext.Request.Cookies["isLogged"] == "true") //calisan ise
+            if (HttpContext.Request.Cookies["Authority"] == "1" || HttpContext.Request.Cookies["Authority"] == "2" && HttpContext.Request.Cookies["isLogged"] == "true") //calisan ise
             {
                 return true;
             }
