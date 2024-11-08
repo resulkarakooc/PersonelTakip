@@ -52,6 +52,7 @@ namespace Karakoç.Bussiness.concrete
                     HttpOnly = true, // Çereze tarayıcıdan erişimi sınırla (güvenlik için)
                     IsEssential = true // Çerezin her zaman oluşturulmasını zorunlu kıl
                 };
+               
 
                 // Çerezlerde kullanıcı bilgilerini sakla
                 httpContext.Response.Cookies.Append("CalisanId", user.CalısanId.ToString(), cookieOptions);

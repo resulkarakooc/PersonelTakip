@@ -1,12 +1,6 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using Karakoç.Bussiness.abstracts;
-using Karakoç.Bussiness.concrete;
+﻿using Karakoç.Bussiness.concrete;
 using Karakoç.Models;
-using MernisServiceReference;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace Karakoç.Controllers
 {

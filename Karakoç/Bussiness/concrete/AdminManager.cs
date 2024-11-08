@@ -39,6 +39,7 @@ namespace Karakoç.Bussiness.concrete
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 return false;
             }
 

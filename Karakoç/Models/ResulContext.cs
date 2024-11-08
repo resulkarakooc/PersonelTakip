@@ -7,14 +7,6 @@ namespace Karakoç.Models
 {
     public partial class ResulContext : DbContext
     {
-        public ResulContext()
-        {
-        }
-
-        public ResulContext(DbContextOptions<ResulContext> options)
-            : base(options)
-        {
-        }
 
         public virtual DbSet<Calisan> Calisans { get; set; } = null!;
         public virtual DbSet<GelirTablosu> GelirTablosus { get; set; } = null!;
@@ -23,15 +15,21 @@ namespace Karakoç.Models
         public virtual DbSet<Odemeler> Odemelers { get; set; } = null!;
         public virtual DbSet<Yevmiyeler> Yevmiyelers { get; set; } = null!;
 
+        private readonly IConfiguration _configuration;
+
+        public ResulContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=RESUL-THINKPAD\\SQLEXPRESS02;Database=Resul;Trusted_Connection=True;");
+                var connectionString = _configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Calisan>(entity =>
